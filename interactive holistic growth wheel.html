@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holistic Growth Wheel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        svg text {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        svg path {
+            cursor: pointer;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .popup-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .popup {
+                width: 90%;
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Holistic Growth Wheel</h1>
+        <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel"></svg>
+    </div>
+    <div id="popup" class="popup">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <div id="popup-content"></div>
+    </div>
+
+    <script>
+        const domains = ['Emotional', 'Mental', 'Physical', 'Social'];
+        const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
+        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
+
+        const domainInvolves = {
+            Emotional: 'wellbeing, resilience, and purpose',
+            Mental: 'mindset, learning, and problem-solving',
+            Physical: 'health, vitality, and bodily capabilities',
+            Social: 'relationships, community, and interpersonal skills'
+        };
+
+        const examples = {
+            Emotional: {
+                'Crisis': 'Overwhelmed, unable to cope with feelings',
+                'Stagnant': 'Emotions manageable, but not particularly fulfilled',
+                'Growth': 'Developing greater emotional awareness and resilience',
+                'Flourishing': 'Deep sense of contentment, navigating complex emotions with ease',
+                'Crisis to Stagnant': 'Develop basic coping mechanisms for overwhelming emotions',
+                'Stagnant to Growth': 'Practice daily gratitude journaling',
+                'Growth to Flourishing': 'Cultivate deep empathy and emotional intelligence'
+            },
+            Mental: {
+                'Crisis': 'Anxiety, depression, poor focus',
+                'Stagnant': 'Daily tasks manageable, but not intellectually stimulated',
+                'Growth': 'Actively learning and expanding mental capabilities',
+                'Flourishing': 'Sharp, curious mind; creative problem-solving; continuous learning',
+                'Crisis to Stagnant': 'Establish a basic daily routine to improve focus',
+                'Stagnant to Growth': 'Learn a new skill or language',
+                'Growth to Flourishing': 'Engage in complex problem-solving or creative projects'
+            },
+            Physical: {
+                'Crisis': 'Severe illness, pain, or mobility issues',
+                'Stagnant': 'Functional health, not particularly energetic, concerned about physical ability',
+                'Growth': 'Improving fitness, nutrition, and overall health',
+                'Flourishing': 'Vibrant health, high energy, strong and capable body',
+                'Crisis to Stagnant': 'Walk a quarter mile unassisted',
+                'Stagnant to Growth': 'Establish a regular exercise routine',
+                'Growth to Flourishing': 'Compete in a challenging physical event (e.g., marathon)'
+            },
+            Social: {
+                'Crisis': 'Isolated, lonely, or in conflict',
+                'Stagnant': 'Basic social needs met, but relationships lack depth',
+                'Growth': 'Expanding social circle, improving communication skills',
+                'Flourishing': 'Rich, supportive relationships; strong sense of community and belonging',
+                'Crisis to Stagnant': 'Reach out to one friend or family member weekly',
+                'Stagnant to Growth': 'Join a club or group aligned with your interests',
+                'Growth to Flourishing': 'Mentor others and build a supportive community'
+            }
+        };
+
+        function createSVGElement(type, attributes) {
+            const element = document.createElementNS('http://www.w3.org/2000/svg', type);
+            for (const key in attributes) {
+                element.setAttribute(key, attributes[key]);
+            }
+            return element;
+        }
+
+        function renderSector(domain, index) {
+            const angle = (2 * Math.PI) / domains.length;
+            const startAngle = index * angle - Math.PI / 2;
+            const endAngle = (index + 1) * angle - Math.PI / 2;
+
+            const group = createSVGElement('g', {});
+
+            states.forEach((state, stateIndex) => {
+                const innerRadius = 80 + stateIndex * 40;
+                const outerRadius = innerRadius + 40;
+
+                const x1 = 300 + innerRadius * Math.cos(startAngle);
+                const y1 = 300 + innerRadius * Math.sin(startAngle);
+                const x2 = 300 + outerRadius * Math.cos(startAngle);
+                const y2 = 300 + outerRadius * Math.sin(startAngle);
+                const x3 = 300 + outerRadius * Math.cos(endAngle);
+                const y3 = 300 + outerRadius * Math.sin(endAngle);
+                const x4 = 300 + innerRadius * Math.cos(endAngle);
+                const y4 = 300 + innerRadius * Math.sin(endAngle);
+
+                const path = createSVGElement('path', {
+                    d: `M ${x1} ${y1} L ${x2} ${y2} A ${outerRadius} ${outerRadius} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${innerRadius} ${innerRadius} 0 0 0 ${x1} ${y1}`,
+                    fill: colors[index],
+                    'fill-opacity': '0.6',
+                    stroke: 'white',
+                    'data-domain': domain,
+                    'data-state': state
+                });
+
+                path.addEventListener('click', handleSectionClick);
+
+                const midAngle = (startAngle + endAngle) / 2;
+                const midRadius = (innerRadius + outerRadius) / 2;
+                const labelX = 300 + midRadius * Math.cos(midAngle);
+                const labelY = 300 + midRadius * Math.sin(midAngle);
+
+                const text = createSVGElement('text', {
+                    x: labelX,
+                    y: labelY,
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle',
+                    transform: `rotate(${(midAngle * 180) / Math.PI + 90}, ${labelX}, ${labelY})`,
+                    'font-size': '14',
+                    fill: 'white',
+                    'pointer-events': 'none'
+                });
+                text.textContent = state;
+
+                group.appendChild(path);
+                group.appendChild(text);
+            });
+
+            const labelAngle = (startAngle + endAngle) / 2;
+            const labelRadius = 300;
+            const labelX = 300 + labelRadius * Math.cos(labelAngle);
+            const labelY = 300 + labelRadius * Math.sin(labelAngle);
+
+            const domainLabel = createSVGElement('text', {
+                x: labelX,
+                y: labelY,
+                'text-anchor': labelX > 300 ? 'start' : 'end',
+                'dominant-baseline': 'middle',
+                'font-size': '22',
+                'font-weight': 'bold',
+                fill: colors[index],
+                'data-domain': domain,
+                cursor: 'pointer'
+            });
+            domainLabel.textContent = domain;
+            domainLabel.addEventListener('click', handleDomainClick);
+
+            group.appendChild(domainLabel);
+
+            return group;
+        }
+
+        function handleSectionClick(event) {
+            const domain = event.target.getAttribute('data-domain');
+            const state = event.target.getAttribute('data-state');
+
+            document.querySelectorAll('path').forEach(path => {
+                path.setAttribute('fill-opacity', '0.6');
+            });
+            event.target.setAttribute('fill-opacity', '0.8');
+
+            const popupContent = document.getElementById('popup-content');
+            if (state === 'Flourishing') {
+                popupContent.innerHTML = `
+                    <h3>${domain} - ${state}</h3>
+                    <p><strong>Description:</strong> ${examples[domain][state]}</p>
+                    <p><strong>Goal:</strong> Congratulations! You've reached the highest level in this domain.</p>
+                `;
+            } else {
+                const nextState = states[states.indexOf(state) + 1];
+                popupContent.innerHTML = `
+                    <h3>${domain}: ${state} to ${nextState}</h3>
+                    <p><strong>Description:</strong> ${examples[domain][state]}</p>
+                    <p><strong>Goal:</strong> ${examples[domain][`${state} to ${nextState}`]}</p>
+                `;
+            }
+            
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function handleDomainClick(event) {
+            const domain = event.target.getAttribute('data-domain');
+            const popupContent = document.getElementById('popup-content');
+            popupContent.innerHTML = `
+                <h3>${domain}</h3>
+                <p><strong>Involves:</strong> ${domainInvolves[domain]}</p>
+            `;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function initializeWheel() {
+            const svg = document.getElementById('growth-wheel');
+            domains.forEach((domain, index) => {
+                const sector = renderSector(domain, index);
+                svg.appendChild(sector);
+            });
+        }
+
+        initializeWheel();
+
+        // Close popup with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        });
+
+        // Close popup with back swipe on mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchendX < touchstartX) {
+                closePopup();
+            }
+        }
+    </script>
+</body>
+</html>
