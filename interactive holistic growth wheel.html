@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holistic Growth Wheel</title>
+    <title>Holistic Growth Wheel Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: radial-gradient(circle, rgb(233 188 55 / 25%) 0%, rgb(255 236 179 / 22%) 100%);
         }
         .container {
             text-align: center;
@@ -36,6 +36,16 @@
         }
         svg path {
             cursor: pointer;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
         .popup {
             display: none;
@@ -71,9 +81,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Holistic Growth Wheel</h1>
-        <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel"></svg>
+        <h1>Holistic Growth Wheel Example</h1>
+        <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel">
+        </svg>
     </div>
+    <div id="popup-overlay" class="popup-overlay"></div>
     <div id="popup" class="popup">
         <span class="popup-close" onclick="closePopup()">&times;</span>
         <div id="popup-content"></div>
@@ -239,6 +251,7 @@
                 `;
             }
             
+            document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
         }
 
@@ -249,10 +262,12 @@
                 <h3>${domain}</h3>
                 <p><strong>Involves:</strong> ${domainInvolves[domain]}</p>
             `;
+            document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
         }
 
         function closePopup() {
+            document.getElementById('popup-overlay').style.display = 'none';
             document.getElementById('popup').style.display = 'none';
         }
 
@@ -265,6 +280,14 @@
         }
 
         initializeWheel();
+
+        // Close popup when clicking outside
+        document.getElementById('popup-overlay').addEventListener('click', closePopup);
+
+        // Prevent closing when clicking inside the popup
+        document.getElementById('popup').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
 
         // Close popup with ESC key
         document.addEventListener('keydown', function(event) {
