@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulMingle - Mindful Interaction App</title>
+    <style>
+        :root {
+            --primary-color: #8A2BE2;
+            --secondary-color: #00CED1;
+            --text-color: #333;
+            --background-color: #F0F4F8;
+            --card-background: #FFFFFF;
+        }
+        body, html {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background-color: var(--card-background);
+            margin-bottom: 2rem;
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        .how-to-use {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .step {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .step h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        .party-mode-highlight {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .party-mode-highlight h3 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        #cta {
+            background: var(--primary-color);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        @media (max-width: 768px) {
+            .how-to-use {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>MindfulMingle</h1>
+            <p>Mindful Interaction for Every Moment</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#how-to-use">How to Use</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h2>Embrace the Power of Silence</h2>
+                <p>Discover a revolutionary way to connect, focus, and grow. MindfulMingle transforms everyday moments into opportunities for mindfulness, whether you're seeking personal growth, deeper relationships, enhanced productivity, or unforgettable social experiences. Silence has never been so powerful – or so much fun!</p>
+            </section>
+
+            <section id="how-to-use">
+                <h2>How to Use MindfulMingle</h2>
+                <div class="how-to-use">
+                    <div class="step">
+                        <h3>1. Set Your Challenge</h3>
+                        <p>Choose a duration for your silence or focused interaction challenge. Start with just a few minutes and work your way up!</p>
+                    </div>
+                    <div class="step">
+                        <h3>2. Stay Silent</h3>
+                        <p>During the challenge, try not to speak. Use this time for reflection, active listening, or focused work.</p>
+                    </div>
+                    <div class="step">
+                        <h3>3. Track Your Progress</h3>
+                        <p>If you succeed, celebrate and extend your challenge. If you speak, the app will adjust your time. Every attempt helps you grow!</p>
+                    </div>
+                    <div class="step">
+                        <h3>4. Connect and Share</h3>
+                        <p>Invite friends, family, or colleagues to join your challenges. Share your achievements and inspire others on their mindfulness journey.</p>
+                    </div>
+                </div>
+                <div class="party-mode-highlight">
+                    <h3>Discover Party Mode: Your Social Superpower!</h3>
+                    <p>Feeling anxious at social gatherings? Party Mode turns silence into your secret weapon! With fun, non-verbal challenges and ice-breakers, you'll connect with others in a low-pressure, exciting way. No small talk required – let your actions and presence speak volumes!</p>
+                </div>
+            </section>
+
+            <section id="about">
+                <h2>About MindfulMingle</h2>
+                <p>MindfulMingle is a versatile app designed to promote mindfulness, improve communication, and enhance focus across various settings. Whether you're looking to improve personally, strengthen relationships, boost workplace productivity, or add a unique twist to social gatherings, MindfulMingle has a mode for you.</p>
+            </section>
+
+            <section id="cta">
+                <h2>Ready to start your mindful journey?</h2>
+                <button id="downloadBtn">Download Now</button>
+            </section>
+
+            <section id="contact">
+                <h2>Contact Us</h2>
+                <p>Email: info@mindfulmingle.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MindfulMingle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            alert('Thank you for your interest! MindfulMingle is coming soon to app stores.');
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
