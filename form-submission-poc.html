@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intake Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        label { display: block; margin-top: 10px; }
+        input, textarea { width: 100%; padding: 5px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Intake Form</h1>
+    <form id="intakeForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="jim" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="paulblart@mailcop.com" required>
+
+        <label for="goals">What are your primary goals?</label>
+        <textarea id="goals" name="goals" rows="4"  required>eat more pasta.</textarea>
+
+        <label for="challenges">What challenges are you facing?</label>
+        <textarea id="challenges" name="challenges" rows="4" required>kids messing with my segway.</textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('intakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const jsonData = JSON.stringify(Object.fromEntries(formData));
+            
+            // Base64 encode the JSON data
+            const encodedData = btoa(jsonData);
+            
+            // Create metadata
+            const metadata = {
+                formVersion: "1.0",
+                submissionDate: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+            
+            // Create HTML email body with hidden metadata and visible message
+            const emailBody = `
+                Thank you for your submission. Your form data has been received
+                    <div style="display:none;" id="metadata">${JSON.stringify(metadata)}</div>
+                    <div style="display:none;" id="formdata">${encodedData}</div>
+                </body>
+                </html>
+            `;
+            
+            // Create the mailto link with HTML body
+            const mailtoLink = `mailto:your-email@example.com?subject=New Intake Form Submission&body=${encodeURIComponent(emailBody)}`;
+            
+            // Open the email client
+            window.location.href = mailtoLink;
+        });
+    </script>
+</body>
+</html>
