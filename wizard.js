@@ -1,5 +1,5 @@
 let currentStep = 1;
-const totalSteps = 3;
+const totalSteps = 3; // Adjust this if you add more steps
 let formData = {};
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,33 +13,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadStep(step) {
-    const url = `step${step}.html`; // Assuming the step files are named step1.html, step2.html, etc.
-    const stepElement = document.getElementById(`step-${step}`);
-    
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 400) {
-            stepElement.innerHTML = xhr.responseText;
-            stepElement.classList.add('active');
-            attachInputListeners(stepElement);  // Attach event listeners to inputs
-            loadFormData();  // Load any existing data from localStorage
-        } else {
-            console.error('Failed to load content.');
-        }
-    };
-    xhr.onerror = function() {
-        console.error('Request failed.');
-    };
-    
-    xhr.send();
+    if (step < totalSteps) {
+        const url = `step${step}.html`; // Assuming the step files are named step1.html, step2.html, etc.
+        const stepElement = document.getElementById(`step-${step}`);
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                stepElement.innerHTML = xhr.responseText;
+                stepElement.classList.add('active');
+                attachInputListeners(stepElement);  // Attach event listeners to inputs
+                loadFormData();  // Load any existing data from localStorage
+            } else {
+                console.error('Failed to load content.');
+            }
+        };
+        xhr.onerror = function() {
+            console.error('Request failed.');
+        };
+        
+        xhr.send();
+    } else if (step === totalSteps + 1) {
+        // Redirect to the review page
+        window.location.href = 'review.html';
+    }
 
     // Save the current step to localStorage
     localStorage.setItem('currentStep', step);
 }
 
 function nextStep() {
-    if (currentStep < totalSteps) {
+    if (currentStep < totalSteps + 1) {
         document.getElementById(`step-${currentStep}`).classList.remove('active');
         currentStep++;
         loadStep(currentStep);
@@ -58,7 +63,7 @@ function prevStep() {
 
 function updateNavigationButtons() {
     document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline';
-    document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline';
+    document.getElementById('nextBtn').style.display = currentStep === totalSteps + 1 ? 'none' : 'inline';
 }
 
 // Attach event listeners to all inputs within a step

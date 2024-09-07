@@ -1,0 +1,36 @@
+
+<div id="review-content">
+    <h2>Review Your Information</h2>
+</div>
+<button type="button" id="submitBtn" onclick="submitForm()">Submit</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadReviewData();
+    });
+
+    function loadReviewData() {
+        const formData = JSON.parse(localStorage.getItem('formData')) || {};
+        const reviewContent = document.getElementById('review-content');
+        reviewContent.innerHTML = '<h2>Review Your Information</h2>';
+
+        for (const key in formData) {
+            if (formData.hasOwnProperty(key)) {
+                const value = formData[key];
+                const p = document.createElement('p');
+                p.innerHTML = `<strong>${key}:</strong> ${value}`;
+                reviewContent.appendChild(p);
+            }
+        }
+    }
+
+    function submitForm() {
+        const formData = JSON.parse(localStorage.getItem('formData')) || {};
+        const encodedData = btoa(JSON.stringify(formData));
+        const email = 'submission@example.com';
+        const subject = 'Form Submission';
+        const body = `Here is the encoded form data: ${encodedData}`;
+
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+</script>
