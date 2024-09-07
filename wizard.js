@@ -3,6 +3,11 @@ const totalSteps = 3;
 let formData = {};
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Load the last visited step from localStorage
+    const savedStep = localStorage.getItem('currentStep');
+    if (savedStep) {
+        currentStep = parseInt(savedStep, 10);
+    }
     loadStep(currentStep);
     updateNavigationButtons();
 });
@@ -28,6 +33,9 @@ function loadStep(step) {
     };
     
     xhr.send();
+
+    // Save the current step to localStorage
+    localStorage.setItem('currentStep', step);
 }
 
 function nextStep() {
