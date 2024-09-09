@@ -3,50 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holistic Growth Wheel Example</title>
+    <title>Holistic Growth Wheel Presentation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Holistic Growth Wheel</h1>
-        <div id="intro-text">
-            <p>Explore the interconnected domains of personal growth. Click on any section of the wheel to see examples and goals for that area.</p>
+
+        <div id="presentation-container">
+            <div id="slide1" class="slide">
+                <div id="intro-text">
+                    Explore the interconnected domains of personal growth. Click on any
+                    section of the wheel to see examples and goals for that area.
+                </div>
+            </div>
+
+            <div id="slide2" class="slide">
+                <div class="main-content">
+                    <div class="wheel-container">
+                        <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel">
+                            <!-- SVG content will be inserted here by JavaScript -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slide3" class="slide">
+                <div class="sidebar">
+                    <div class="service-selector">
+                        <h2>Service Impact</h2>
+                        <p>See how different services commonly help people grow:</p>
+                        <select id="service-select">
+                            <option value="">Select a service</option>
+                        </select>
+                    </div>
+                    <div id="service-description"></div>
+                </div>
+            </div>
+
+            <div id="slide4" class="slide">
+                <h2>Thank You!</h2>
+                <p>Explore the Holistic Growth Wheel to continue your journey of personal development.</p>
+            </div>
         </div>
 
-        <div class="main-content">
-            <div class="wheel-container">
-                <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel">
-                    <!-- SVG content will be inserted here by JavaScript -->
-                </svg>
-            </div>
-            
-            <div class="sidebar">
-                <div class="service-selector">
-                    <h2>Service Impact</h2>
-                    <p>See how different services commonly help people grow:</p>
-                    <select id="service-select">
-                        <option value="">Select a service</option>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
-                <div id="service-description">
-                    <!-- Service description will be populated by JavaScript -->
-                </div>
-            </div>
+        <div id="presentation-controls">
+            <button id="prevButton">Previous</button>
+            <button id="nextButton">Next</button>
+            <button id="skipButton">Skip to End</button>
+        </div>
+
+        <div id="progress-container">
+            <div id="progressBar"></div>
         </div>
     </div>
 
     <div id="popup-overlay" class="popup-overlay"></div>
     <div id="popup" class="popup">
-        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <span class="popup-close" onclick="closePopup()">×</span>
         <div id="popup-content"></div>
     </div>
 
-    <script src="constants.js" type="module"></script>
-    <script src="svg-manipulation.js" type="module"></script>
-    <script src="wheel-manipulation.js" type="module"></script>
-    <script src="growth-services.js" type="module"></script>
-    <script src="popup.js" type="module"></script>
-    <script src="script.js" type="module"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
