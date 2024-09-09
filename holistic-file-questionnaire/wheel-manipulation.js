@@ -18,10 +18,7 @@ export function highlighSection(domain, state) {
 
 export function initializeWheel() {
     const svg = document.getElementById('growth-wheel');
-    domains.forEach((domain, index) => {
-        const sector = renderSector(domain, index);
-        svg.appendChild(sector);
-    });
+    domains.forEach(domain => svg.appendChild(renderSector(domain)));
 }
 
 
