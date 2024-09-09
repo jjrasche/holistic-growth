@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holistic Growth Wheel Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Holistic Growth Wheel</h1>
+        <div id="intro-text">
+            <p>Explore the interconnected domains of personal growth. Click on any section of the wheel to see examples and goals for that area.</p>
+        </div>
+
+        <div class="main-content">
+            <div class="wheel-container">
+                <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel">
+                    <!-- SVG content will be inserted here by JavaScript -->
+                </svg>
+            </div>
+            
+            <div class="sidebar">
+                <div class="service-selector">
+                    <h2>Service Impact</h2>
+                    <p>See how different services commonly help people grow:</p>
+                    <select id="service-select">
+                        <option value="">Select a service</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div id="service-description">
+                    <!-- Service description will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-overlay" class="popup-overlay"></div>
+    <div id="popup" class="popup">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <div id="popup-content"></div>
+    </div>
+
+    <script src="constants.js" type="module"></script>
+    <script src="script.js" type="module"></script>
+</body>
+</html>

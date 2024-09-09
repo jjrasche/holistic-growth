@@ -133,11 +133,9 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <h1>Holistic Growth Wheel</h1>
-        
         <div id="intro-text">
             <p>Explore the interconnected domains of personal growth. Click on any section of the wheel to see examples and goals for that area.</p>
         </div>
@@ -417,11 +415,23 @@
             document.getElementById('service-select').value = '';
 
             const popupContent = document.getElementById('popup-content');
+
+            // Find relevant services for the selected domain and state
+            const relevantServices = Object.keys(serviceAreas).filter(service => {
+                const areas = serviceAreas[service].areas;
+                return areas[domain] && areas[domain].includes(state);
+            });
+
+            const servicesList = relevantServices.map(service => {
+                return service.charAt(0).toUpperCase() + service.slice(1).replace('-', ' ');
+            }).join(', ');
+
             if (state === 'Flourishing') {
                 popupContent.innerHTML = `
                     <h3>${domain} - ${state}</h3>
                     <p><strong>Description:</strong> ${examples[domain][state]}</p>
                     <p><strong>Example Goal:</strong> Congratulations! You've reached the highest level in this domain.</p>
+                    <p><strong>Growth Services:</strong> ${servicesList}</p>
                 `;
             } else {
                 const nextState = states[states.indexOf(state) + 1];
@@ -429,9 +439,10 @@
                     <h3>${domain}: ${state} to ${nextState}</h3>
                     <p><strong>Description:</strong> ${examples[domain][state]}</p>
                     <p><strong>Example Goal:</strong> ${examples[domain][`${state} to ${nextState}`]}</p>
+                    <p><strong>Growth Services:</strong> ${servicesList}</p>
                 `;
             }
-            
+
             document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
         }

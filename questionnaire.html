@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <style>
+        .question-container {
+            display: none;
+        }
+        .question-container.active {
+            display: block;
+        }
+        #navigation {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wizard">
+        <div id="question" class="question-container active"></div>
+    </div>
+
+    <div id="navigation">
+        <button type="button" id="prevBtn" onclick="prevQuestion()">Previous</button>
+        <button type="button" id="nextBtn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <script src="questionnaire.js"></script>
+</body>
+</html>
