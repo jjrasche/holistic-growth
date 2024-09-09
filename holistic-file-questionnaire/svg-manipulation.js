@@ -44,27 +44,7 @@ export function renderSector(domain) {
         renderSectionLabel(sector, state);
         path.addEventListener('click', handleSectionClick);
     });
-
-    const labelAngle = (sector.startAngle + sector.endAngle) / 2;
-    const labelRadius = 300;
-    const labelX = 300 + labelRadius * Math.cos(labelAngle);
-    const labelY = 300 + labelRadius * Math.sin(labelAngle);
-
-    const domainLabel = createSVGElement('text', {
-        x: labelX,
-        y: labelY,
-        'text-anchor': labelX > 300 ? 'start' : 'end',
-        'dominant-baseline': 'middle',
-        'font-size': '22',
-        'font-weight': 'bold',
-        fill: colors[sector.index],
-        'data-domain': sector.text,
-        cursor: 'pointer'
-    });
-    domainLabel.textContent = sector.text;
-    domainLabel.addEventListener('click', handleDomainClick);
-
-    sector.svg.appendChild(domainLabel);
+    renderSectorTitle(sector);
 
     return sector.svg;
 }
@@ -111,4 +91,27 @@ function renderSectionFill(sector, state) {
     });
     sector.svg.appendChild(path);
     return path;
+}
+
+function renderSectorTitle(sector) {
+    const labelAngle = (sector.startAngle + sector.endAngle) / 2;
+    const labelRadius = 300;
+    const labelX = 300 + labelRadius * Math.cos(labelAngle);
+    const labelY = 300 + labelRadius * Math.sin(labelAngle);
+
+    const domainLabel = createSVGElement('text', {
+        x: labelX,
+        y: labelY,
+        'text-anchor': labelX > 300 ? 'start' : 'end',
+        'dominant-baseline': 'middle',
+        'font-size': '22',
+        'font-weight': 'bold',
+        fill: colors[sector.index],
+        'data-domain': sector.text,
+        cursor: 'pointer'
+    });
+    domainLabel.textContent = sector.text;
+    domainLabel.addEventListener('click', handleDomainClick);
+
+    sector.svg.appendChild(domainLabel);
 }
