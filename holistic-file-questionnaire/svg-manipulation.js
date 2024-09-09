@@ -3,6 +3,11 @@ import { domains, states, colors, unHighlightOpacity } from "./constants.js";
 import { handleDomainClick } from "./wheel-manipulation.js";
 
 
+export function createSVGWheel(interactive) {
+    const svg = document.getElementById('growth-wheel');
+    domains.forEach(domain => svg.appendChild(renderSector(domain, interactive)));
+}
+
 function createSVGElement(type, attributes) {
     const element = document.createElementNS('http://www.w3.org/2000/svg', type);
     for (const key in attributes) {
@@ -11,7 +16,8 @@ function createSVGElement(type, attributes) {
     return element;
 }
 
-function getSector(sector) {
+
+function getSector(sector, interactive) {
     const index = domains.findIndex(d => d === sector)
     const angle = (2 * Math.PI) / domains.length;
     return {
@@ -19,7 +25,8 @@ function getSector(sector) {
         index,
         svg: createSVGElement('g', {}),
         startAngle: index * angle - Math.PI / 2,
-        endAngle: (index + 1) * angle - Math.PI / 2
+        endAngle: (index + 1) * angle - Math.PI / 2,
+        interactive
     }
 }
 
@@ -35,14 +42,16 @@ function getState(state) {
     };
 }
 
-export function renderSector(domain) {
-    const sector = getSector(domain);
+export function renderSector(domain, interactive) {
+    const sector = getSector(domain, interactive);
 
     states.forEach(state => {
         state = getState(state);
         const path = renderSectionFill(sector, state);
         renderSectionLabel(sector, state);
-        path.addEventListener('click', handleSectionClick);
+        if (interactive) {
+            path.addEventListener('click', handleSectionClick);
+        }
     });
     renderSectorTitle(sector);
 
@@ -111,7 +120,9 @@ function renderSectorTitle(sector) {
         cursor: 'pointer'
     });
     domainLabel.textContent = sector.text;
-    domainLabel.addEventListener('click', handleDomainClick);
+    if (sector.interactive) {
+        domainLabel.addEventListener('click', handleDomainClick);
+    }
 
     sector.svg.appendChild(domainLabel);
 }

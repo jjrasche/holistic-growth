@@ -16,12 +16,6 @@ export function highlighSection(domain, state) {
     }
 }
 
-export function initializeWheel() {
-    const svg = document.getElementById('growth-wheel');
-    domains.forEach(domain => svg.appendChild(renderSector(domain)));
-}
-
-
 export function handleSectionClick(event) {
     const domain = event.target.getAttribute('data-domain');
     const state = event.target.getAttribute('data-state');

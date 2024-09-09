@@ -1,5 +1,5 @@
-import { initializeWheel } from "./wheel-manipulation.js";
+import { createSVGWheel } from "./svg-manipulation.js";
 import { updateServiceDescription } from "./growth-services.js"
 
-initializeWheel();
+createSVGWheel(false);
 updateServiceDescription('');
