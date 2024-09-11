@@ -1,12 +1,10 @@
-// holistic-growth-wheel-presentation.js
-
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
-        super(4); // Total number of slides
+        super(5); // Updated total number of slides
         this.wheelContainer = document.querySelector('.wheel-container');
         this.sidebar = document.querySelector('.sidebar');
         this.mainContent = document.querySelector('.main-content');
@@ -18,16 +16,20 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         switch (this.currentSlide) {
             case 0:
                 this.showFullScreenWheel();
-                this.showInternalExternalLines();
                 break;
             case 1:
+                this.showFullScreenWheel();
+                this.showInternalExternalLines();
+                this.showInternalExternalSummary();
+                break;
+            case 2:
+                this.showInternalDescription();
+                break;
+            case 3:
                 this.restoreLayout();
                 this.showDomains();
                 break;
-            case 2:
-                this.showSufferingJoyRings();
-                break;
-            case 3:
+            case 4:
                 this.showCrisisToFlourishing();
                 break;
         }
@@ -37,6 +39,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         unHighlightAllSections();
         this.removeInternalExternalLines();
         this.removeSufferingJoyArrow();
+        this.removeInternalDescription();
         closePopup();
     }
 
@@ -54,6 +57,16 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
     showInternalExternalLines() {
         const svg = document.getElementById('growth-wheel');
+        
+        // Add semi-transparent colored overlay
+        const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        overlay.setAttribute('x', '325');
+        overlay.setAttribute('y', '0');
+        overlay.setAttribute('width', '325');
+        overlay.setAttribute('height', '650');
+        overlay.setAttribute('fill', '#FFD700');
+        overlay.setAttribute('opacity', '0.2');
+        overlay.setAttribute('id', 'internal-overlay');
         
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', '325');
@@ -78,15 +91,49 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         externalLabel.textContent = 'External';
         externalLabel.setAttribute('id', 'external-label');
 
+        svg.appendChild(overlay);
         svg.appendChild(line);
         svg.appendChild(internalLabel);
         svg.appendChild(externalLabel);
+    }
+
+    showInternalDescription() {
+        const svg = document.getElementById('growth-wheel');
+        
+        const descriptionBox = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        descriptionBox.setAttribute('x', '340');
+        descriptionBox.setAttribute('y', '20');
+        descriptionBox.setAttribute('width', '290');
+        descriptionBox.setAttribute('height', '200');
+        descriptionBox.setAttribute('id', 'internal-description');
+
+        const descriptionContent = document.createElement('div');
+        descriptionContent.innerHTML = `
+            <h3 style="margin: 0; color: #333;">Internal Domains</h3>
+            <p style="margin-top: 10px; font-size: 14px; color: #555;">
+                The right half of the wheel represents internal domains:
+                <ul style="margin-top: 5px; padding-left: 20px;">
+                    <li><strong>Emotional:</strong> Feelings, resilience, and self-awareness</li>
+                    <li><strong>Mental:</strong> Thoughts, beliefs, and cognitive processes</li>
+                </ul>
+                These domains focus on your inner world and personal growth.
+            </p>
+        `;
+        descriptionContent.style.cssText = 'background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;';
+
+        descriptionBox.appendChild(descriptionContent);
+        svg.appendChild(descriptionBox);
     }
 
     removeInternalExternalLines() {
         document.getElementById('internal-external-line')?.remove();
         document.getElementById('internal-label')?.remove();
         document.getElementById('external-label')?.remove();
+        document.getElementById('internal-overlay')?.remove();
+    }
+
+    removeInternalDescription() {
+        document.getElementById('internal-description')?.remove();
     }
 
     showDomains() {
@@ -131,6 +178,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         document.getElementById('suffering-label')?.remove();
         document.getElementById('joy-label')?.remove();
     }
+
 
     showCrisisToFlourishing() {
         const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];

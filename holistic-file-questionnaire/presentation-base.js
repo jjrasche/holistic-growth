@@ -1,9 +1,9 @@
-// presentation-base.js
-
 export class Presentation {
     constructor(totalSlides) {
         this.currentSlide = 0;
         this.totalSlides = totalSlides;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
     }
 
     initialize() {
@@ -31,6 +31,25 @@ export class Presentation {
                     break;
             }
         });
+
+        // Touch events for mobile swipe
+        document.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+        });
+    }
+
+    handleSwipe() {
+        const swipeThreshold = 50; // minimum distance for swipe
+        if (this.touchStartX - this.touchEndX > swipeThreshold) {
+            this.nextSlide(); // Swipe left
+        } else if (this.touchEndX - this.touchStartX > swipeThreshold) {
+            this.prevSlide(); // Swipe right
+        }
     }
 
     nextSlide() {
@@ -63,9 +82,9 @@ export class Presentation {
         const nextButton = document.getElementById('nextButton');
         const skipButton = document.getElementById('skipButton');
 
-        prevButton.disabled = this.currentSlide === 0;
-        nextButton.disabled = this.currentSlide === this.totalSlides - 1;
-        skipButton.disabled = this.currentSlide === this.totalSlides - 1;
+        prevButton.style.display = this.currentSlide === 0 ? 'none' : 'block';
+        nextButton.style.display = this.currentSlide === this.totalSlides - 1 ? 'none' : 'block';
+        skipButton.style.display = this.currentSlide === this.totalSlides - 1 ? 'none' : 'block';
     }
 
     updateProgressBar() {
