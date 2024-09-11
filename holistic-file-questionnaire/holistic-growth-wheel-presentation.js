@@ -7,6 +7,9 @@ import { highlighSection, unHighlightAllSections } from "./wheel-manipulation.js
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super(4); // Total number of slides
+        this.wheelContainer = document.querySelector('.wheel-container');
+        this.sidebar = document.querySelector('.sidebar');
+        this.mainContent = document.querySelector('.main-content');
     }
 
     showCurrentSlide() {
@@ -14,9 +17,11 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
         switch (this.currentSlide) {
             case 0:
+                this.showFullScreenWheel();
                 this.showInternalExternalLines();
                 break;
             case 1:
+                this.restoreLayout();
                 this.showDomains();
                 break;
             case 2:
@@ -33,6 +38,18 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.removeInternalExternalLines();
         this.removeSufferingJoyArrow();
         closePopup();
+    }
+
+    showFullScreenWheel() {
+        this.wheelContainer.classList.add('fullscreen');
+        this.sidebar.classList.add('hidden');
+        this.mainContent.classList.add('fullscreen');
+    }
+
+    restoreLayout() {
+        this.wheelContainer.classList.remove('fullscreen');
+        this.sidebar.classList.remove('hidden');
+        this.mainContent.classList.remove('fullscreen');
     }
 
     showInternalExternalLines() {

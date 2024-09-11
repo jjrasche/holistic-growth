@@ -2,10 +2,12 @@ import { handleSectionClick } from "./wheel-manipulation.js"
 import { domains, states, colors, unHighlightOpacity } from "./constants.js";
 import { handleDomainClick } from "./wheel-manipulation.js";
 
-
 export function createSVGWheel(interactive) {
     const svg = document.getElementById('growth-wheel');
-    domains.forEach(domain => svg.appendChild(renderSector(domain, interactive)));
+    svg.setAttribute('viewBox', '0 0 650 650');
+    const wheelGroup = createSVGElement('g', { transform: 'translate(325, 325)' });
+    svg.appendChild(wheelGroup);
+    domains.forEach(domain => wheelGroup.appendChild(renderSector(domain, interactive)));
 }
 
 function createSVGElement(type, attributes) {
@@ -15,7 +17,6 @@ function createSVGElement(type, attributes) {
     }
     return element;
 }
-
 
 function getSector(sector, interactive) {
     const index = domains.findIndex(d => d === sector)
@@ -58,13 +59,11 @@ export function renderSector(domain, interactive) {
     return sector.svg;
 }
 
-
-// section
 function renderSectionLabel(sector, state) {
     const midAngle = (sector.startAngle + sector.endAngle) / 2;
     const midRadius = (state.innerRadius + state.outerRadius) / 2;
-    const labelX = 300 + midRadius * Math.cos(midAngle);
-    const labelY = 300 + midRadius * Math.sin(midAngle);
+    const labelX = midRadius * Math.cos(midAngle);
+    const labelY = midRadius * Math.sin(midAngle);
 
     const text = createSVGElement('text', {
         x: labelX,
@@ -81,14 +80,14 @@ function renderSectionLabel(sector, state) {
 }
 
 function renderSectionFill(sector, state) {
-    const x1 = 300 + state.innerRadius * Math.cos(sector.startAngle);
-    const y1 = 300 + state.innerRadius * Math.sin(sector.startAngle);
-    const x2 = 300 + state.outerRadius * Math.cos(sector.startAngle);
-    const y2 = 300 + state.outerRadius * Math.sin(sector.startAngle);
-    const x3 = 300 + state.outerRadius * Math.cos(sector.endAngle);
-    const y3 = 300 + state.outerRadius * Math.sin(sector.endAngle);
-    const x4 = 300 + state.innerRadius * Math.cos(sector.endAngle);
-    const y4 = 300 + state.innerRadius * Math.sin(sector.endAngle);
+    const x1 = state.innerRadius * Math.cos(sector.startAngle);
+    const y1 = state.innerRadius * Math.sin(sector.startAngle);
+    const x2 = state.outerRadius * Math.cos(sector.startAngle);
+    const y2 = state.outerRadius * Math.sin(sector.startAngle);
+    const x3 = state.outerRadius * Math.cos(sector.endAngle);
+    const y3 = state.outerRadius * Math.sin(sector.endAngle);
+    const x4 = state.innerRadius * Math.cos(sector.endAngle);
+    const y4 = state.innerRadius * Math.sin(sector.endAngle);
     
     const path = createSVGElement('path', {
         d: `M ${x1} ${y1} L ${x2} ${y2} A ${state.outerRadius} ${state.outerRadius} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${state.innerRadius} ${state.innerRadius} 0 0 0 ${x1} ${y1}`,
@@ -105,13 +104,13 @@ function renderSectionFill(sector, state) {
 function renderSectorTitle(sector) {
     const labelAngle = (sector.startAngle + sector.endAngle) / 2;
     const labelRadius = 300;
-    const labelX = 300 + labelRadius * Math.cos(labelAngle);
-    const labelY = 300 + labelRadius * Math.sin(labelAngle);
+    const labelX = labelRadius * Math.cos(labelAngle);
+    const labelY = labelRadius * Math.sin(labelAngle);
 
     const domainLabel = createSVGElement('text', {
         x: labelX,
         y: labelY,
-        'text-anchor': labelX > 300 ? 'start' : 'end',
+        'text-anchor': labelX > 0 ? 'start' : 'end',
         'dominant-baseline': 'middle',
         'font-size': '22',
         'font-weight': 'bold',

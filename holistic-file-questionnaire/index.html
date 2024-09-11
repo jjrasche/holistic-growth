@@ -10,40 +10,20 @@
     <div class="container">
         <h1>Holistic Growth Wheel</h1>
 
-        <div id="presentation-container">
-            <div id="slide1" class="slide">
-                <div id="intro-text">
-                    Explore the interconnected domains of personal growth. Click on any
-                    section of the wheel to see examples and goals for that area.
-                </div>
+        <div class="main-content">
+            <div class="wheel-container">
+                <svg viewBox="0 0 650 650" id="growth-wheel"></svg>
             </div>
 
-            <div id="slide2" class="slide">
-                <div class="main-content">
-                    <div class="wheel-container">
-                        <svg width="650" height="650" viewBox="0 0 650 650" id="growth-wheel">
-                            <!-- SVG content will be inserted here by JavaScript -->
-                        </svg>
-                    </div>
+            <div class="sidebar">
+                <div class="service-selector">
+                    <h2>Service Impact</h2>
+                    <p>See how different services commonly help people grow:</p>
+                    <select id="service-select">
+                        <option value="">Select a service</option>
+                    </select>
                 </div>
-            </div>
-
-            <div id="slide3" class="slide">
-                <div class="sidebar">
-                    <div class="service-selector">
-                        <h2>Service Impact</h2>
-                        <p>See how different services commonly help people grow:</p>
-                        <select id="service-select">
-                            <option value="">Select a service</option>
-                        </select>
-                    </div>
-                    <div id="service-description"></div>
-                </div>
-            </div>
-
-            <div id="slide4" class="slide">
-                <h2>Thank You!</h2>
-                <p>Explore the Holistic Growth Wheel to continue your journey of personal development.</p>
+                <div id="service-description"></div>
             </div>
         </div>
 
@@ -60,7 +40,7 @@
 
     <div id="popup-overlay" class="popup-overlay"></div>
     <div id="popup" class="popup">
-        <span class="popup-close" onclick="closePopup()">×</span>
+        <span class="popup-close">×</span>
         <div id="popup-content"></div>
     </div>
 

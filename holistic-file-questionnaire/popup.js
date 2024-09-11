@@ -42,37 +42,21 @@ export function openDomainPopup(domain) {
     showPopup();
 }
 
+// Add this function to set up event listeners
+export function setupPopupListeners() {
+    document.querySelector('.popup-close').addEventListener('click', closePopup);
+    document.getElementById('popup-overlay').addEventListener('click', closePopup);
+    // Prevent closing when clicking inside the popup
+    document.getElementById('popup').addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
 
-// Close popup when clicking outside
-document.getElementById('popup-overlay').addEventListener('click', closePopup);
-
-// Prevent closing when clicking inside the popup
-document.getElementById('popup').addEventListener('click', function(event) {
-    event.stopPropagation();
-});
-
-// Close popup with ESC key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closePopup();
-    }
-});
-
-// Close popup with back swipe on mobile
-let touchstartX = 0;
-let touchendX = 0;
-
-document.addEventListener('touchstart', e => {
-    touchstartX = e.changedTouches[0].screenX;
-});
-
-document.addEventListener('touchend', e => {
-    touchendX = e.changedTouches[0].screenX;
-    handleSwipe();
-});
-
-function handleSwipe() {
-    if (touchendX < touchstartX) {
-        closePopup();
-    }
+    // Close popup with ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closePopup();
+        }
+    });
 }
+
+setupPopupListeners();
