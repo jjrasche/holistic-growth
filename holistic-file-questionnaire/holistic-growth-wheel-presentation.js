@@ -4,7 +4,7 @@ import { highlighSection, unHighlightAllSections } from "./wheel-manipulation.js
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
-        super(5); // Updated total number of slides
+        super(5);
         this.wheelContainer = document.querySelector('.wheel-container');
         this.sidebar = document.querySelector('.sidebar');
         this.mainContent = document.querySelector('.main-content');
@@ -15,21 +15,24 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
         switch (this.currentSlide) {
             case 0:
-                this.showFullScreenWheel();
+                this.showIntroduction();
                 break;
             case 1:
+                this.showEmotionalDomain();
+                break;
+            case 2:
                 this.showFullScreenWheel();
                 this.showInternalExternalLines();
                 this.showInternalExternalSummary();
                 break;
-            case 2:
+            case 3:
                 this.showInternalDescription();
                 break;
-            case 3:
+            case 4:
                 this.restoreLayout();
                 this.showDomains();
                 break;
-            case 4:
+            case 5:
                 this.showCrisisToFlourishing();
                 break;
         }
@@ -41,6 +44,51 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.removeSufferingJoyArrow();
         this.removeInternalDescription();
         closePopup();
+        this.clearMainContent();
+    }
+
+    clearMainContent() {
+        const contentDiv = document.createElement('div');
+        contentDiv.id = 'stage-content';
+        this.mainContent.innerHTML = '';
+        this.mainContent.appendChild(contentDiv);
+    }
+
+    showIntroduction() {
+        const content = document.getElementById('stage-content');
+        content.innerHTML = `
+            <h2>Welcome to the Holistic Growth Wheel</h2>
+            <p class="intro-text">The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.</p>
+        `;
+        this.fadeIn(content);
+    }
+
+    showEmotionalDomain() {
+        const content = document.getElementById('stage-content');
+        content.innerHTML = `
+            <div class="domain-content">
+                <h3 class="domain-title">Emotional Domain</h3>
+                <p class="domain-overview">Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.</p>
+                <p class="domain-details">Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.</p>
+                <p class="domain-success">Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life.</p>
+            </div>
+        `;
+
+        this.wheelContainer.classList.remove('fullscreen');
+        this.wheelContainer.style.width = '50%';
+        content.style.width = '45%';
+        content.style.float = 'right';
+
+        this.fadeIn(content.querySelector('.domain-title'));
+        setTimeout(() => this.fadeIn(content.querySelector('.domain-overview')), 1000);
+        setTimeout(() => this.fadeIn(content.querySelector('.domain-details')), 3000);
+        setTimeout(() => this.fadeIn(content.querySelector('.domain-success')), 6000);
+    }
+
+    fadeIn(element) {
+        element.style.opacity = 0;
+        element.style.transition = 'opacity 1s';
+        setTimeout(() => element.style.opacity = 1, 50);
     }
 
     showFullScreenWheel() {

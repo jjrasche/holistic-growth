@@ -1,4 +1,4 @@
-export const domains = ['Emotional', 'Mental', 'Physical', 'Social'];
+export const domains = ['Social', 'Physical', 'Mental', 'Emotional'];
 export const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
 export const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
 export const highlightOpacity = '1';
