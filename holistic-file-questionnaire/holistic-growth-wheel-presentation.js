@@ -1,13 +1,14 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
+import { states } from './constants.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super(5); // Total number of stages
         this.wheelContainer = document.querySelector('.wheel-container');
         this.createTextArea();
-        this.typingSpeed = 10; // milliseconds per character
+        this.typingSpeed = 3; // milliseconds per character
     }
 
     createTextArea() {
@@ -75,6 +76,11 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
     showEmotionalDomain() {
+        // highlighSection('Emotional', 'Crisis');
+        // highlighSection('Emotional', 'Stagnant');
+        // highlighSection('Emotional', 'Growth');
+        // highlighSection('Emotional', 'Flourishing');
+        states.forEach(state => highlighSection('Emotional', state));
         const content = `
             <div class="text-content domain-explanation">
                 <h3 class="domain-title">Emotional Domain</h3>
@@ -85,10 +91,6 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         `;
         this.typeText(content, () => {
             // Highlight the Emotional domain on the wheel after typing is complete
-            highlighSection('Emotional', 'Crisis');
-            highlighSection('Emotional', 'Stagnant');
-            highlighSection('Emotional', 'Growth');
-            highlighSection('Emotional', 'Flourishing');
         });
     }
 
@@ -101,35 +103,42 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         // Hide all text initially
         textElements.forEach(element => {
             element.style.visibility = 'hidden';
-            // element.textContent = element.textContent; // Remove any HTML tags
         });
         
         let element = textElements[elementIndex];
         let text = element.textContent;
         element.style.visibility = 'visible';
-        // element.textContent = element.textContent; // Remove any HTML tags
+        
         const type = () => {
             if (elementIndex < textElements.length) {
-                element.innerHTML = text.substring(0, charIndex) + '<span class="cursor">|</span>';
+                // Create a temporary element to hold the typed text
+                const tempElement = document.createElement('span');
+                tempElement.innerHTML = text.substring(0, charIndex) + '<span class="cursor">|</span>';
+                
+                // Replace the content of the current element
+                element.innerHTML = '';
+                element.appendChild(tempElement);
+                
                 charIndex++;
-
+    
                 if (charIndex > text.length) {
                     charIndex = 0;
-                    element.innerHTML = text; // Remove cursor from completed element
-                    // new element
-                    element = textElements[++elementIndex];
-                    if (!!element) {
+                    element.textContent = text; // Set final text without cursor
+                    elementIndex++;
+                    if (elementIndex < textElements.length) {
+                        element = textElements[elementIndex];
                         element.style.visibility = 'visible';
                         text = element.textContent;
                     }
                 }
-
-                setTimeout(type, this.typingSpeed);
+    
+                requestAnimationFrame(type);
             } else if (callback) {
                 callback();
             }
         };
-        type();
+        
+        requestAnimationFrame(type);
     }
     // showIntroduction() {
     //     this.textArea.innerHTML = `

@@ -77,11 +77,11 @@ h1 {
     line-height: 1.5;
     margin-bottom: 10px;
 }
-
+/* 
 .domain-title, .domain-overview, .domain-details, .domain-success {
     opacity: 0;
     transition: opacity 1s;
-}
+} */
 
 /* Service selector styles */
 .service-selector {
