@@ -1,8 +1,10 @@
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background: radial-gradient(circle, rgb(233 188 55 / 25%) 0%, rgb(255 236 179 / 22%) 100%);
+    overflow: hidden; /* Prevents scrolling during presentation */
 }
 
 .container {
@@ -17,70 +19,71 @@ h1 {
     margin-bottom: 20px;
 }
 
-#intro-text {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 30px;
-    font-style: italic;
-    color: #555;
-}
-
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    transition: all 0.5s ease;
-}
-
-.main-content.fullscreen {
-    justify-content: center;
-}
-
+/* Wheel container styles */
 .wheel-container {
-    flex: 1;
+    position: fixed;
+    top: 50%;
+    left: 25%; /* Positioned to the left */
+    transform: translate(-50%, -50%);
+    width: 50%; /* Adjust as needed */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.5s ease;
 }
 
 #growth-wheel {
-    width: 100%;
-    height: auto;
-    max-width: 650px;
-    max-height: 650px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
-/* Full-screen styles */
-.wheel-container.fullscreen {
+/* Presentation text area styles */
+.presentation-text-area {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    right: 0;
+    width: 50%; /* Takes up the right half of the screen */
     height: 100vh;
-    z-index: 1000;
-    background-color: white;
+    overflow-y: auto; /* Allows scrolling if content is long */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    box-sizing: border-box;
 }
 
-.wheel-container.fullscreen #growth-wheel {
-    max-width: 90vmin;
-    max-height: 90vmin;
+.text-content {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* Hide sidebar when wheel is fullscreen */
-.sidebar.hidden {
-    display: none;
+/* Introduction styles */
+.introduction h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
-.sidebar {
-    width: 300px;
-    margin-left: 30px;
+.introduction p {
+    font-size: 18px;
+    line-height: 1.6;
 }
 
-.sidebar.hidden {
-    display: none;
+/* Domain explanation styles */
+.domain-explanation h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
 }
 
+.domain-explanation p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.domain-title, .domain-overview, .domain-details, .domain-success {
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Service selector styles */
 .service-selector {
     background-color: #fff;
     padding: 20px;
@@ -109,6 +112,7 @@ select {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+/* Popup styles */
 .popup-overlay {
     display: none;
     position: fixed;
@@ -143,8 +147,7 @@ select {
     cursor: pointer;
 }
 
-
-
+/* Presentation controls */
 #presentation-controls {
     position: fixed;
     top: 0;
@@ -153,9 +156,9 @@ select {
     height: 100%;
     pointer-events: none;
     z-index: 1000;
-  }
-  
-  .arrow-button {
+}
+
+.arrow-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -166,17 +169,17 @@ select {
     padding: 15px;
     cursor: pointer;
     pointer-events: auto;
-  }
-  
-  .left-arrow {
+}
+
+.left-arrow {
     left: 20px;
-  }
-  
-  .right-arrow {
+}
+
+.right-arrow {
     right: 20px;
-  }
-  
-  .skip-button {
+}
+
+.skip-button {
     position: absolute;
     bottom: 20px;
     left: 50%;
@@ -187,27 +190,32 @@ select {
     padding: 10px 20px;
     cursor: pointer;
     pointer-events: auto;
-  }
-
-  #stage-content {
-    opacity: 0;
-    transition: opacity 1s;
 }
 
-.domain-content {
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Progress bar */
+#progress-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #ddd;
 }
 
-.domain-title, .domain-overview, .domain-details, .domain-success {
-    opacity: 0;
-    transition: opacity 1s;
+#progressBar {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.5s ease-in-out;
 }
 
-.intro-text {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #333;
+
+.cursor {
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
 }

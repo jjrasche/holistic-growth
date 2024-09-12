@@ -69,12 +69,15 @@ function populateServiceSelect() {
 
 
 // setup
-populateServiceSelect();
-
-document.getElementById('service-select').addEventListener('change', function(event) {
-    const selectedService = event.target.value;
-    highlightServiceAreas(selectedService);
-    updateServiceDescription(selectedService);
-    // todo: might need clearing of service select
-    // document.getElementById('service-select').value = '';
-});
+function setup() {
+    populateServiceSelect();
+    
+    document.getElementById('service-select').addEventListener('change', function(event) {
+        const selectedService = event.target.value;
+        highlightServiceAreas(selectedService);
+        updateServiceDescription(selectedService);
+        // todo: might need clearing of service select
+        // document.getElementById('service-select').value = '';
+    });
+    updateServiceDescription('');
+}
