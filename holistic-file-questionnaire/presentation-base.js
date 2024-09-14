@@ -1,10 +1,12 @@
 export class Presentation {
-    constructor(totalSlides) {
+    constructor() {
         this.currentSlide = 0;
-        this.totalSlides = totalSlides;
+        this.fadeTime = 1.25;
         this.touchStartX = 0;
         this.touchEndX = 0;
     }
+
+    setSlides = (slides) => this.slides = slides;
 
     initialize() {
         this.updateButtons();
@@ -12,13 +14,14 @@ export class Presentation {
         this.showCurrentSlide();
         this.setupEventListeners();
     }
-
+    
     setupEventListeners() {
         document.getElementById('nextButton').addEventListener('click', () => this.nextSlide());
         document.getElementById('prevButton').addEventListener('click', () => this.prevSlide());
         document.getElementById('skipButton').addEventListener('click', () => this.skipToEnd());
 
         document.addEventListener('keydown', (event) => {
+            console.log('Keydown event:', event.key);
             switch(event.key) {
                 case 'ArrowRight':
                     this.nextSlide();
@@ -32,7 +35,6 @@ export class Presentation {
             }
         });
 
-        // Touch events for mobile swipe
         document.addEventListener('touchstart', (e) => {
             this.touchStartX = e.changedTouches[0].screenX;
         });
@@ -42,7 +44,6 @@ export class Presentation {
             this.handleSwipe();
         });
     }
-
     handleSwipe() {
         const swipeThreshold = 50; // minimum distance for swipe
         if (this.touchStartX - this.touchEndX > swipeThreshold) {
@@ -52,8 +53,8 @@ export class Presentation {
         }
     }
 
-    nextSlide() {
-        if (this.currentSlide < this.totalSlides - 1) {
+    nextSlide(event) {
+        if (this.currentSlide < this.slides.length - 1) {
             this.currentSlide++;
             this.updatePresentation();
         }
@@ -67,7 +68,7 @@ export class Presentation {
     }
 
     skipToEnd() {
-        this.currentSlide = this.totalSlides - 1;
+        this.currentSlide = this.slides.length - 1;
         this.updatePresentation();
     }
 
@@ -83,19 +84,19 @@ export class Presentation {
         const skipButton = document.getElementById('skipButton');
 
         prevButton.style.display = this.currentSlide === 0 ? 'none' : 'block';
-        nextButton.style.display = this.currentSlide === this.totalSlides - 1 ? 'none' : 'block';
-        skipButton.style.display = this.currentSlide === this.totalSlides - 1 ? 'none' : 'block';
+        nextButton.style.display = this.currentSlide === this.slides.length - 1 ? 'none' : 'block';
+        skipButton.style.display = this.currentSlide === this.slides.length - 1 ? 'none' : 'block';
     }
 
     updateProgressBar() {
         const progressBar = document.getElementById('progressBar');
-        const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+        const progress = ((this.currentSlide + 1) / this.slides.length) * 100;
         progressBar.style.width = `${progress}%`;
     }
 
     showCurrentSlide() {
-        // This method should be overridden in child classes
-        throw new Error('showCurrentSlide method must be implemented in child class');
+        this.resetPresentation();
+        this.slides[this.currentSlide]();
     }
 
     resetPresentation() {

@@ -1,16 +1,23 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlighDomain, highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
-import { emotional } from './constants.js';
+import { emotional, mental, physical, social } from './constants.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
-        super(5); // Total number of stages
+        super()
+        this.setSlides([
+            () => this.introduction(),
+            () => this.emotionalDomain(),
+            () => this.socialDomain(),
+            () => this.mentalDomain(),
+            () => this.physicalDomain()
+        ]); 
         this.wheelContainer = document.querySelector('.wheel-container');
         this.createTextArea();
-        this.typingSpeed = 3; // milliseconds per character
+        this.initialize();
     }
-
+    
     createTextArea() {
         let textArea = document.querySelector('.presentation-text-area');
         if (!textArea) {
@@ -20,40 +27,13 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         }
         this.textArea = textArea;
     }
-    slides = [
-        this.showIntroduction,
-        this.showEmotionalDomain
-    ]
 
-    showCurrentSlide() {
-        this.resetPresentation();
-
-        switch (this.currentSlide) {
-            case 0:
-                this.showEmotionalDomain();
-                break;
-            case 1:
-                this.showIntroduction();
-                break;
-            case 2:
-                this.showFullScreenWheel();
-                this.showInternalExternalLines();
-                this.showInternalExternalSummary();
-                break;
-            case 3:
-                this.showInternalDescription();
-                break;
-            case 4:
-                this.restoreLayout();
-                this.showDomains();
-                break;
-            case 5:
-                this.showCrisisToFlourishing();
-                break;
+    clearTextArea() {
+        if (this.textArea) {
+            this.textArea.innerHTML = '';
         }
     }
-
-
+    
     resetPresentation() {
         unHighlightAllSections();
         this.removeInternalExternalLines();
@@ -63,75 +43,85 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.clearTextArea();
     }
 
-    clearTextArea() {
-        if (this.textArea) {
-            this.textArea.innerHTML = '';
-        }
-    }
-
     displayText(titleText, paragraphs) {
         const title = document.createElement('h3');
         title.className = 'title';
         title.innerHTML = titleText;
         this.textArea.insertAdjacentElement("beforeend", title);
 
-        const addText = () => {
-            if (paragraphs.length > 0) {
-                const paragraph = paragraphs.shift();;
-                const p = document.createElement('p');
-                p.style.opacity = 0;
-                p.style.visibility = 'hidden';
-                
-                p.innerHTML = paragraph.text
-                this.textArea.insertAdjacentElement("beforeend", p);
-                this.fadeIn(p, paragraph.opacityTransition);
-                setTimeout(addText, paragraph.visibleDelay * 1000);
-            }
-        };
-        setTimeout(addText, paragraphs[0].visibleDelay * 1000);
+        paragraphs.forEach(pText => {
+            const p = document.createElement('p');            
+            p.innerHTML = pText;
+            this.textArea.insertAdjacentElement("beforeend", p);
+        })
+
+        // fadeInParagraphs(paragraphs);
     }
+
+
+    // fadeInParagraphs(paragraphs) {
+    //     if (index < paragraphs.length) {
+    //         const paragraph = paragraphs[index];
+    //         const p = document.createElement('p');
+    //         p.style.opacity = 0;
+    //         p.style.visibility = 'hidden';
+            
+    //         p.innerHTML = paragraph;
+    //         this.textArea.insertAdjacentElement("beforeend", p);
+            
+    //         this.fadeIn(p, () => setTimeout(() => addText(index + 1), this.fadeTime*1000));
+    //     }
+    // };
     
-    fadeIn(element, transitionTime = 1) {
-        element.style.opacity = 0;
-        element.style.transition = `opacity ${transitionTime}s`;
-        element.style.visibility = 'visible';
-        setTimeout(() => {
-            element.style.opacity = 1;
-        }, 50);
+    // fadeIn(element,  callback) {
+    //     element.style.opacity = 0;
+    //     element.style.transition = `opacity ${this.fadeTime}s`;
+    //     element.style.visibility = 'visible';
+        
+    //     setTimeout(() => {
+    //         element.style.opacity = 1;
+    //     }, 50);
+    //     callback();
+    // }
+
+    introduction() {
+        this.displayText("Welcome to the Holistic Growth Wheel", [
+            "The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be."
+        ]);
     }
 
-    showIntroduction() {
-
-        Welcome to the Holistic Growth Wheel
-        The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.
-
-        this.fadeIn(this.textArea.querySelector('.text-content'));
-    }
-
-    showEmotionalDomain() {
+    emotionalDomain() {
         highlighDomain(emotional);
         this.displayText("Emotional Domain",[
-            {visibleDelay: .1, opacityTransition: .5, text: "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you."},
-            {visibleDelay: 10, opacityTransition: 1.5, text: "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy."},
-            {visibleDelay: 2, opacityTransition: 1.5, text: "Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life."}
+            "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.",
+            "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.",
+            "Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life."
         ]);
+    }
 
+    socialDomain() {
+        highlighDomain(social);
+        this.displayText("Social Domain",[
+            
+        ]);
+    }
+
+    mentalDomain() {
+        highlighDomain(mental);
+        this.displayText("Mental Domain",[
+            
+        ]);
+    }
+
+    physicalDomain() {
+        highlighDomain(physical);
+        this.displayText("Physical Domain",[
+
+        ]);
     }
     
 
-    showFullScreenWheel() {
-        this.wheelContainer.classList.add('fullscreen');
-        this.sidebar.classList.add('hidden');
-        this.mainContent.classList.add('fullscreen');
-    }
-
-    restoreLayout() {
-        this.wheelContainer.classList.remove('fullscreen');
-        this.sidebar.classList.remove('hidden');
-        this.mainContent.classList.remove('fullscreen');
-    }
-
-    showInternalExternalLines() {
+    internalExternalLines() {
         const svg = document.getElementById('growth-wheel');
         
         // Add semi-transparent colored overlay
@@ -173,7 +163,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         svg.appendChild(externalLabel);
     }
 
-    showInternalDescription() {
+    internalDescription() {
         const svg = document.getElementById('growth-wheel');
         
         const descriptionBox = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
@@ -212,7 +202,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         document.getElementById('internal-description')?.remove();
     }
 
-    showDomains() {
+    domains() {
         const domains = ['Emotional', 'Mental', 'Physical', 'Social'];
         domains.forEach((domain, index) => {
             setTimeout(() => {
@@ -221,7 +211,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         });
     }
 
-    showSufferingJoyRings() {
+    sufferingJoyRings() {
         const svg = document.getElementById('growth-wheel');
         
         const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -256,7 +246,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
 
-    showCrisisToFlourishing() {
+    crisisToFlourishing() {
         const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
         states.forEach((state, index) => {
             setTimeout(() => {
@@ -284,7 +274,7 @@ showIntroduction() {
         this.typeText(content);
     }
 
-    showEmotionalDomain() {
+    emotionalDomain() {
         // highlighSection('Emotional', 'Crisis');
         // highlighSection('Emotional', 'Stagnant');
         // highlighSection('Emotional', 'Growth');

@@ -7,5 +7,4 @@ import { closePopup } from "./popup.js";
 createSVGWheel(true);  // Set to true to make the wheel interactive
 
 // Create and initialize the Holistic Growth Wheel presentation
-const presentation = new HolisticGrowthWheelPresentation();
-presentation.initialize();
+new HolisticGrowthWheelPresentation();
