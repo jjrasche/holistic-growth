@@ -2,16 +2,19 @@ import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlighDomain, highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
 import { emotional, mental, physical, social } from './constants.js';
+import { innerLandscapeOverlay, outerExpressionOverlay, typeOfEffertOverlay } from './svg-manipulation.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super()
         this.setSlides([
+            () => this.typeOfEffortDivide(),
+            () => this.innerLandscape(),
             () => this.introduction(),
             () => this.emotionalDomain(),
             () => this.socialDomain(),
+            () => this.physicalDomain(),
             () => this.mentalDomain(),
-            () => this.physicalDomain()
         ]); 
         this.wheelContainer = document.querySelector('.wheel-container');
         this.createTextArea();
@@ -43,47 +46,6 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.clearTextArea();
     }
 
-    displayText(titleText, paragraphs) {
-        const title = document.createElement('h3');
-        title.className = 'title';
-        title.innerHTML = titleText;
-        this.textArea.insertAdjacentElement("beforeend", title);
-
-        paragraphs.forEach(pText => {
-            const p = document.createElement('p');            
-            p.innerHTML = pText;
-            this.textArea.insertAdjacentElement("beforeend", p);
-        })
-
-        // fadeInParagraphs(paragraphs);
-    }
-
-
-    // fadeInParagraphs(paragraphs) {
-    //     if (index < paragraphs.length) {
-    //         const paragraph = paragraphs[index];
-    //         const p = document.createElement('p');
-    //         p.style.opacity = 0;
-    //         p.style.visibility = 'hidden';
-            
-    //         p.innerHTML = paragraph;
-    //         this.textArea.insertAdjacentElement("beforeend", p);
-            
-    //         this.fadeIn(p, () => setTimeout(() => addText(index + 1), this.fadeTime*1000));
-    //     }
-    // };
-    
-    // fadeIn(element,  callback) {
-    //     element.style.opacity = 0;
-    //     element.style.transition = `opacity ${this.fadeTime}s`;
-    //     element.style.visibility = 'visible';
-        
-    //     setTimeout(() => {
-    //         element.style.opacity = 1;
-    //     }, 50);
-    //     callback();
-    // }
-
     introduction() {
         this.displayText("Welcome to the Holistic Growth Wheel", [
             "The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be."
@@ -102,65 +64,42 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     socialDomain() {
         highlighDomain(social);
         this.displayText("Social Domain",[
-            
+            "Social well-being is rooted in the relationships that support, challenge, and enrich you. It's highlighted in how you connect with others and communicate ideas. Social well beimg influences your sense of belonging. It empowers you to both contribute to and draw strength from your community.",
+            "Involves communication, empathy, and interpersonal skills. It impacts your relationships, community contributions, and your dynamic in social situations.",
+            "Success is forming and maintaining deep and supportive relationships, effectively collaborating with others, contributing meaningfully to your community, and navigating social situations with confidence and authenticity.",
         ]);
     }
 
     mentalDomain() {
         highlighDomain(mental);
         this.displayText("Mental Domain",[
-            
+            "Mental well-being shapes how you perceive and interact with the world. It's the lens through which you interpret experiences, solve problems, and make decisions. A healthy mental state empowers you to learn, adapt, and thrive in an ever-changing environment.",
+            "Involves mindset, learning, and critical thinking. It impacts how you perceive, acquire knowledge, solve problems, and express creativity.",
+            "Success is creating effective strategies to overcome challenges, continuously learning and adapting from experiences, and developing optimal problem-solving skills.",
         ]);
     }
 
     physicalDomain() {
         highlighDomain(physical);
         this.displayText("Physical Domain",[
-
+            "Physical well-being is the foundation of how you engage in the world. It often influences your mood and cognitive function. A strong physical state allows you to fully engage in life's activities.",
+            "Involves bodily awareness, nutrition, and physical routines. It impacts your health, energy levels, and overall physical capabilities.",
+            "Success is cultivating natural energy, preventing chronic conditions and injuries, and maintaining a level of health and fitness that allows you to pursue your ambitions without physical limitations.",
         ]);
     }
     
+    typeOfEffortDivide() {
+        typeOfEffertOverlay();
+        this.displayText("Internal / External Growth Focus",[
+            "The Holistic Growth Wheel is fundamentally divided into two halves, representing the dual nature of personal development. This division reflects the distinction between our inner world and our outer expression, each requiring different approaches and focuses for growth. Understanding this divide is crucial for creating a balanced and comprehensive personal development strategy.",
+        ]);
+    }
 
-    internalExternalLines() {
-        const svg = document.getElementById('growth-wheel');
-        
-        // Add semi-transparent colored overlay
-        const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        overlay.setAttribute('x', '325');
-        overlay.setAttribute('y', '0');
-        overlay.setAttribute('width', '325');
-        overlay.setAttribute('height', '650');
-        overlay.setAttribute('fill', '#FFD700');
-        overlay.setAttribute('opacity', '0.2');
-        overlay.setAttribute('id', 'internal-overlay');
-        
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', '325');
-        line.setAttribute('y1', '0');
-        line.setAttribute('x2', '325');
-        line.setAttribute('y2', '650');
-        line.setAttribute('stroke', 'black');
-        line.setAttribute('stroke-dasharray', '5,5');
-        line.setAttribute('id', 'internal-external-line');
-        
-        const internalLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        internalLabel.setAttribute('x', '490');
-        internalLabel.setAttribute('y', '325');
-        internalLabel.setAttribute('text-anchor', 'middle');
-        internalLabel.textContent = 'Internal';
-        internalLabel.setAttribute('id', 'internal-label');
-
-        const externalLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        externalLabel.setAttribute('x', '160');
-        externalLabel.setAttribute('y', '325');
-        externalLabel.setAttribute('text-anchor', 'middle');
-        externalLabel.textContent = 'External';
-        externalLabel.setAttribute('id', 'external-label');
-
-        svg.appendChild(overlay);
-        svg.appendChild(line);
-        svg.appendChild(internalLabel);
-        svg.appendChild(externalLabel);
+    innerLandscape() {
+        innerLandscapeOverlay();
+        this.displayText("Internal / External Growth Focus",[
+            "The left side of the wheel represents our inner landscape, encompassing the Emotional and Mental domains. This is the realm of introspection, self-awareness, and cognitive processes. Growth in these areas requires us to turn our attention inward, examining our thoughts, feelings, beliefs, and motivations. It involves developing emotional intelligence, reshaping our mindset, refining our inner dialogue, and cultivating resilience. Progress here often comes through practices like meditation, self-reflection, journaling, and therapy, which help us navigate and reshape our internal world.",
+        ]);
     }
 
     internalDescription() {

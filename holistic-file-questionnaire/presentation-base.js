@@ -14,6 +14,49 @@ export class Presentation {
         this.showCurrentSlide();
         this.setupEventListeners();
     }
+
+    
+    displayText(titleText, paragraphs) {
+        const title = document.createElement('h3');
+        title.className = 'title';
+        title.innerHTML = titleText;
+        this.textArea.insertAdjacentElement("beforeend", title);
+
+        paragraphs.forEach(pText => {
+            const p = document.createElement('p');            
+            p.innerHTML = pText;
+            this.textArea.insertAdjacentElement("beforeend", p);
+        })
+
+        // fadeInParagraphs(paragraphs);
+    }
+
+
+    // fadeInParagraphs(paragraphs) {
+    //     if (index < paragraphs.length) {
+    //         const paragraph = paragraphs[index];
+    //         const p = document.createElement('p');
+    //         p.style.opacity = 0;
+    //         p.style.visibility = 'hidden';
+            
+    //         p.innerHTML = paragraph;
+    //         this.textArea.insertAdjacentElement("beforeend", p);
+            
+    //         this.fadeIn(p, () => setTimeout(() => addText(index + 1), this.fadeTime*1000));
+    //     }
+    // };
+    
+    // fadeIn(element,  callback) {
+    //     element.style.opacity = 0;
+    //     element.style.transition = `opacity ${this.fadeTime}s`;
+    //     element.style.visibility = 'visible';
+        
+    //     setTimeout(() => {
+    //         element.style.opacity = 1;
+    //     }, 50);
+    //     callback();
+    // }
+
     
     setupEventListeners() {
         document.getElementById('nextButton').addEventListener('click', () => this.nextSlide());
@@ -44,6 +87,7 @@ export class Presentation {
             this.handleSwipe();
         });
     }
+
     handleSwipe() {
         const swipeThreshold = 50; // minimum distance for swipe
         if (this.touchStartX - this.touchEndX > swipeThreshold) {
