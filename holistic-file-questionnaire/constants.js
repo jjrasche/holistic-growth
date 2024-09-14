@@ -1,6 +1,12 @@
-export const domains = ['Social', 'Physical', 'Mental', 'Emotional'];
-export const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
+// domains
+export const social = 'Social';
+export const physical = 'Physical';
+export const mental = 'Mental';
+export const emotional = 'Emotional';
+export const domains = [social, physical, mental, emotional];
 export const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
+// states
+export const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
 export const highlightOpacity = '1';
 export const unHighlightOpacity = '.6';
 

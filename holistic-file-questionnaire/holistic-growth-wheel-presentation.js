@@ -1,7 +1,7 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
-import { highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
-import { states } from './constants.js';
+import { highlighDomain, highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
+import { emotional } from './constants.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
@@ -20,16 +20,20 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         }
         this.textArea = textArea;
     }
+    slides = [
+        this.showIntroduction,
+        this.showEmotionalDomain
+    ]
 
     showCurrentSlide() {
         this.resetPresentation();
 
         switch (this.currentSlide) {
             case 0:
-                this.showIntroduction();
+                this.showEmotionalDomain();
                 break;
             case 1:
-                this.showEmotionalDomain();
+                this.showIntroduction();
                 break;
             case 2:
                 this.showFullScreenWheel();
@@ -65,119 +69,53 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         }
     }
 
+    displayText(titleText, paragraphs) {
+        const title = document.createElement('h3');
+        title.className = 'title';
+        title.innerHTML = titleText;
+        this.textArea.insertAdjacentElement("beforeend", title);
+        const addText = () => {
+            setTimeout(() => {
+                const p = document.createElement('p');
+                this.fadeIn(p);
+                p.innerHTML = paragraphs.shift();
+                this.textArea.insertAdjacentElement("beforeend", p);
+                if (paragraphs.length > 0) {
+                    addText();
+                }
+            }, 1000)
+        }
+        addText();
+    }
+
     showIntroduction() {
-        const content = `
+        this.textArea.innerHTML = `
             <div class="text-content introduction">
                 <h2>Welcome to the Holistic Growth Wheel</h2>
                 <p>The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.</p>
             </div>
         `;
-        this.typeText(content);
+        this.fadeIn(this.textArea.querySelector('.text-content'));
     }
 
     showEmotionalDomain() {
-        // highlighSection('Emotional', 'Crisis');
-        // highlighSection('Emotional', 'Stagnant');
-        // highlighSection('Emotional', 'Growth');
-        // highlighSection('Emotional', 'Flourishing');
-        states.forEach(state => highlighSection('Emotional', state));
-        const content = `
-            <div class="text-content domain-explanation">
-                <h3 class="domain-title">Emotional Domain</h3>
-                <p class="domain-overview">Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.</p>
-                <p class="domain-details">Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.</p>
-                <p class="domain-success">Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life.</p>
-            </div>
-        `;
-        this.typeText(content, () => {
-            // Highlight the Emotional domain on the wheel after typing is complete
-        });
-    }
+        highlighDomain(emotional);
+        this.displayText("Emotional Domain",[
+            "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.",
+            "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.",
+            "Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life."
+        ]);
 
-    typeText(content, callback) {
-        this.textArea.innerHTML = content;
-        const textElements = this.textArea.querySelectorAll('h2, h3, p');
-        let elementIndex = 0;
-        let charIndex = 0;
-        
-        // Hide all text initially
-        textElements.forEach(element => {
-            element.style.visibility = 'hidden';
-        });
-        
-        let element = textElements[elementIndex];
-        let text = element.textContent;
+    }
+    
+    fadeIn(element) {
+        element.style.opacity = 0;
+        element.style.transition = 'opacity 1.5s';
         element.style.visibility = 'visible';
-        
-        const type = () => {
-            if (elementIndex < textElements.length) {
-                // Create a temporary element to hold the typed text
-                const tempElement = document.createElement('span');
-                tempElement.innerHTML = text.substring(0, charIndex) + '<span class="cursor">|</span>';
-                
-                // Replace the content of the current element
-                element.innerHTML = '';
-                element.appendChild(tempElement);
-                
-                charIndex++;
-    
-                if (charIndex > text.length) {
-                    charIndex = 0;
-                    element.textContent = text; // Set final text without cursor
-                    elementIndex++;
-                    if (elementIndex < textElements.length) {
-                        element = textElements[elementIndex];
-                        element.style.visibility = 'visible';
-                        text = element.textContent;
-                    }
-                }
-    
-                requestAnimationFrame(type);
-            } else if (callback) {
-                callback();
-            }
-        };
-        
-        requestAnimationFrame(type);
+        setTimeout(() => {
+            element.style.opacity = 1;
+        }, 0);
     }
-    // showIntroduction() {
-    //     this.textArea.innerHTML = `
-    //         <div class="text-content introduction">
-    //             <h2>Welcome to the Holistic Growth Wheel</h2>
-    //             <p>The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.</p>
-    //         </div>
-    //     `;
-    //     this.fadeIn(this.textArea.querySelector('.text-content'));
-    // }
-
-    // showEmotionalDomain() {
-    //     this.textArea.innerHTML = `
-    //         <div class="text-content domain-explanation">
-    //             <h3 class="domain-title">Emotional Domain</h3>
-    //             <p class="domain-overview">Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.</p>
-    //             <p class="domain-details">Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.</p>
-    //             <p class="domain-success">Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life.</p>
-    //         </div>
-    //     `;
-
-    //     const content = this.textArea.querySelector('.text-content');
-    //     this.fadeIn(content.querySelector('.domain-title'));
-    //     setTimeout(() => this.fadeIn(content.querySelector('.domain-overview')), 1000);
-    //     setTimeout(() => this.fadeIn(content.querySelector('.domain-details')), 3000);
-    //     setTimeout(() => this.fadeIn(content.querySelector('.domain-success')), 6000);
-
-    //     // Highlight the Emotional domain on the wheel
-    //     highlighSection('Emotional', 'Crisis');
-    //     highlighSection('Emotional', 'Stagnant');
-    //     highlighSection('Emotional', 'Growth');
-    //     highlighSection('Emotional', 'Flourishing');
-    // }
-
-    // fadeIn(element) {
-    //     element.style.opacity = 0;
-    //     element.style.transition = 'opacity .5s';
-    //     setTimeout(() => element.style.opacity = 1, 50);
-    // }
 
     showFullScreenWheel() {
         this.wheelContainer.classList.add('fullscreen');
@@ -326,3 +264,86 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         });
     }
 }
+
+
+
+
+
+
+/*
+typing effect
+showIntroduction() {
+        const content = `
+            <div class="text-content introduction">
+                <h2>Welcome to the Holistic Growth Wheel</h2>
+                <p>The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.</p>
+            </div>
+        `;
+        this.typeText(content);
+    }
+
+    showEmotionalDomain() {
+        // highlighSection('Emotional', 'Crisis');
+        // highlighSection('Emotional', 'Stagnant');
+        // highlighSection('Emotional', 'Growth');
+        // highlighSection('Emotional', 'Flourishing');
+        states.forEach(state => highlighSection('Emotional', state));
+        const content = `
+            <div class="text-content domain-explanation">
+                <h3 class="domain-title">Emotional Domain</h3>
+                <p class="domain-overview">Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.</p>
+                <p class="domain-details">Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.</p>
+                <p class="domain-success">Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life.</p>
+            </div>
+        `;
+        this.typeText(content, () => {
+            // Highlight the Emotional domain on the wheel after typing is complete
+        });
+    }
+
+    typeText(content, callback) {
+        this.textArea.innerHTML = content;
+        const textElements = this.textArea.querySelectorAll('h2, h3, p');
+        let elementIndex = 0;
+        let charIndex = 0;
+        
+        // Hide all text initially
+        textElements.forEach(element => {
+            element.style.visibility = 'hidden';
+        });
+        
+        let element = textElements[elementIndex];
+        let text = element.textContent;
+        
+        const type = () => {
+            if (elementIndex < textElements.length) {
+                // Create a temporary element to hold the typed text
+                const tempElement = document.createElement('span');
+                tempElement.innerHTML = text.substring(0, charIndex) + '<span class="cursor">|</span>';
+                
+                // Replace the content of the current element
+                element.innerHTML = '';
+                element.style.visibility = 'visible';
+                element.appendChild(tempElement);
+                
+                charIndex++;
+                
+                if (charIndex > text.length) {
+                    charIndex = 0;
+                    element.textContent = text; // Set final text without cursor
+                    elementIndex++;
+                    if (elementIndex < textElements.length) {
+                        element = textElements[elementIndex];
+                        text = element.textContent;
+                    }
+                }
+    
+                requestAnimationFrame(type);
+            } else if (callback) {
+                callback();
+            }
+        };
+        
+        requestAnimationFrame(type);
+    }
+*/

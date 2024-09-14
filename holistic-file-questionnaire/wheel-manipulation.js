@@ -1,6 +1,6 @@
 
-import { domains, unHighlightOpacity, highlightOpacity } from "./constants.js";
-import { renderSector } from "./svg-manipulation.js"
+import { states, unHighlightOpacity, highlightOpacity } from "./constants.js";
+
 import { openDomainPopup, openSectionPopup } from "./popup.js";
 
 export function unHighlightAllSections() {
@@ -14,6 +14,10 @@ export function highlighSection(domain, state) {
     if (path) {
         path.setAttribute('fill-opacity', highlightOpacity);
     }
+}
+
+export function highlighDomain(domain) {   
+    states.forEach(state => highlighSection(domain, state));
 }
 
 export function handleSectionClick(event) {
