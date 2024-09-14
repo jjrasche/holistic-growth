@@ -74,48 +74,50 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         title.className = 'title';
         title.innerHTML = titleText;
         this.textArea.insertAdjacentElement("beforeend", title);
+
         const addText = () => {
-            setTimeout(() => {
+            if (paragraphs.length > 0) {
+                const paragraph = paragraphs.shift();;
                 const p = document.createElement('p');
-                this.fadeIn(p);
-                p.innerHTML = paragraphs.shift();
+                p.style.opacity = 0;
+                p.style.visibility = 'hidden';
+                
+                p.innerHTML = paragraph.text
                 this.textArea.insertAdjacentElement("beforeend", p);
-                if (paragraphs.length > 0) {
-                    addText();
-                }
-            }, 1000)
-        }
-        addText();
+                this.fadeIn(p, paragraph.opacityTransition);
+                setTimeout(addText, paragraph.visibleDelay * 1000);
+            }
+        };
+        setTimeout(addText, paragraphs[0].visibleDelay * 1000);
+    }
+    
+    fadeIn(element, transitionTime = 1) {
+        element.style.opacity = 0;
+        element.style.transition = `opacity ${transitionTime}s`;
+        element.style.visibility = 'visible';
+        setTimeout(() => {
+            element.style.opacity = 1;
+        }, 50);
     }
 
     showIntroduction() {
-        this.textArea.innerHTML = `
-            <div class="text-content introduction">
-                <h2>Welcome to the Holistic Growth Wheel</h2>
-                <p>The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.</p>
-            </div>
-        `;
+
+        Welcome to the Holistic Growth Wheel
+        The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be.
+
         this.fadeIn(this.textArea.querySelector('.text-content'));
     }
 
     showEmotionalDomain() {
         highlighDomain(emotional);
         this.displayText("Emotional Domain",[
-            "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.",
-            "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.",
-            "Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life."
+            {visibleDelay: .1, opacityTransition: .5, text: "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you."},
+            {visibleDelay: 10, opacityTransition: 1.5, text: "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy."},
+            {visibleDelay: 2, opacityTransition: 1.5, text: "Success is: understanding and managing your emotions, using empathy effectively, building emotional resilience, and finding a sense of purpose in life."}
         ]);
 
     }
     
-    fadeIn(element) {
-        element.style.opacity = 0;
-        element.style.transition = 'opacity 1.5s';
-        element.style.visibility = 'visible';
-        setTimeout(() => {
-            element.style.opacity = 1;
-        }, 0);
-    }
 
     showFullScreenWheel() {
         this.wheelContainer.classList.add('fullscreen');
