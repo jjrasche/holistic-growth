@@ -27,8 +27,6 @@ export class Presentation {
             p.innerHTML = pText;
             this.textArea.insertAdjacentElement("beforeend", p);
         })
-
-        // fadeInParagraphs(paragraphs);
     }
 
 

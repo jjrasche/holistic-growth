@@ -127,79 +127,56 @@ function renderSectorTitle(sector) {
 }
 
 export function typeOfEffertOverlay() {
+    return [
+        createInternalExternalLineElement(),
+        createInternalDescriptionElement(),
+        createExternalDescriptionElement(),
+        createExternalLabelElement(),
+        createInternalLabelElement(),
+    ];
+}
+
+const createInternalExternalLineElement = () => createElement('line', { id: 'internal-external-line', x1: 325, y1: 0, x2: 325, y2: 650, stroke: 'black', 'stroke-dasharray': '5,5' });
+const createInternalDescriptionElement = () => createElement('foreignObject', { id: 'internal-description', x: 340, y: 70, width: 300, height: 100 });
+const createExternalDescriptionElement = () => createElement('foreignObject', { id: 'external-description', x: 10, y: 70, width: 300, height: 100 });
+const createExternalLabelElement = () => {
+    const e = createElement('text', { id: 'external-label', x: 490, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    e.textContent = 'External';
+    return e
+};
+const createInternalLabelElement = () => {
+    const e = createElement('text', { id: 'internal-label', x: 160, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    e.textContent = 'Internal'
+    return e;
+}
+
+function createElement(tag, options) {
     const svg = document.getElementById('growth-wheel');
-
-    // Add dividing line
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', '325');
-    line.setAttribute('y1', '0');
-    line.setAttribute('x2', '325');
-    line.setAttribute('y2', '650');
-    line.setAttribute('stroke', 'black');
-    line.setAttribute('stroke-dasharray', '5,5');
-    line.setAttribute('id', 'internal-external-line');
-
-    // Create more emphatic internal label
-    const internalLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    internalLabel.setAttribute('x', '490');
-    internalLabel.setAttribute('y', '50');
-    internalLabel.setAttribute('text-anchor', 'middle');
-    internalLabel.setAttribute('font-size', '24');
-    internalLabel.setAttribute('font-weight', 'bold');
-    internalLabel.textContent = 'External';
-    internalLabel.setAttribute('id', 'external-label');
-
-    // Create more emphatic external label
-    const externalLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    externalLabel.setAttribute('x', '160');
-    externalLabel.setAttribute('y', '50');
-    externalLabel.setAttribute('text-anchor', 'middle');
-    externalLabel.setAttribute('font-size', '24');
-    externalLabel.setAttribute('font-weight', 'bold');
-    externalLabel.textContent = 'Internal';
-    externalLabel.setAttribute('id', 'internal-label');
-
-    // Add description for internal side
-    const internalDesc = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-    internalDesc.setAttribute('x', '340');
-    internalDesc.setAttribute('y', '70');
-    internalDesc.setAttribute('width', '300');
-    internalDesc.setAttribute('height', '100');
-    internalDesc.setAttribute('id', 'internal-description');
-
-    // Add description for external side
-    const externalDesc = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-    externalDesc.setAttribute('x', '10');
-    externalDesc.setAttribute('y', '70');
-    externalDesc.setAttribute('width', '300');
-    externalDesc.setAttribute('height', '100');
-    externalDesc.setAttribute('id', 'external-description');
-
-    svg.appendChild(line);
-    svg.appendChild(internalLabel);
-    svg.appendChild(externalLabel);
-    svg.appendChild(internalDesc);
-    svg.appendChild(externalDesc);
+    const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    applyAttributes(element, options);
+    svg.appendChild(element);
+    return element;
 }
 
 const defaultOverlayOptions = { fill: '#FFD700', opacity: 0.2, y: 0, width: 325, height: 650 };
 
 export function innerLandscapeOverlay() {
-    internalExternalOverlay();
+    let elements = typeOfEffertOverlay();
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'external-overlay', x: 325, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
-    svg.appendChild(overlay);
+    return elements.concat([overlay]);
 }
 
 export function outerExpressionOverlay() {
-    internalExternalOverlay();
+    let elements = typeOfEffertOverlay();
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'internal-overlay', x: 0, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
     svg.appendChild(overlay);
+    return elements.concat([overlay]);
 }
 
 
@@ -214,7 +191,4 @@ function applyAttributes(element, options) {
 export function removeOverlay() {
     document.getElementById('internal-overlay')?.remove();
     document.getElementById('external-overlay')?.remove();
-    // if (overlay) {
-    //     overlay.remove();
-    // }
 }

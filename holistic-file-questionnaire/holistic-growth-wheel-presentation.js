@@ -10,6 +10,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.setSlides([
             () => this.typeOfEffortDivide(),
             () => this.innerLandscape(),
+            () => this.outerExpression(),
             () => this.introduction(),
             () => this.emotionalDomain(),
             () => this.socialDomain(),
@@ -18,6 +19,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         ]); 
         this.wheelContainer = document.querySelector('.wheel-container');
         this.createTextArea();
+        this.stageElements = [];
         this.initialize();
     }
     
@@ -44,6 +46,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         this.removeInternalDescription();
         closePopup();
         this.clearTextArea();
+        this.stageElements.forEach(e => e.remove());
     }
 
     introduction() {
@@ -89,7 +92,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
     
     typeOfEffortDivide() {
-        typeOfEffertOverlay();
+        this.stageElements.concat(typeOfEffertOverlay());
         this.displayText("Internal / External Growth Focus",[
             "The Holistic Growth Wheel is fundamentally divided into two halves, representing the dual nature of personal development. This division reflects the distinction between our inner world and our outer expression, each requiring different approaches and focuses for growth. Understanding this divide is crucial for creating a balanced and comprehensive personal development strategy.",
         ]);
@@ -97,8 +100,15 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
     innerLandscape() {
         innerLandscapeOverlay();
-        this.displayText("Internal / External Growth Focus",[
+        this.displayText("Internal Growth Focus",[
             "The left side of the wheel represents our inner landscape, encompassing the Emotional and Mental domains. This is the realm of introspection, self-awareness, and cognitive processes. Growth in these areas requires us to turn our attention inward, examining our thoughts, feelings, beliefs, and motivations. It involves developing emotional intelligence, reshaping our mindset, refining our inner dialogue, and cultivating resilience. Progress here often comes through practices like meditation, self-reflection, journaling, and therapy, which help us navigate and reshape our internal world.",
+        ]);
+    }
+
+    outerExpression() {
+        outerExpressionOverlay();
+        this.displayText("External Growth Focus",[
+            "The right side of the wheel represents our outer expression, comprising the Social and Physical domains. This is the arena where we interact with the world around us, manifesting our inner growth through tangible actions and relationships. Development in these areas necessitates active engagement with our environment, practicing new skills, and adapting our behaviors. It involves improving our communication, building relationships, enhancing our physical health, and developing new competencies. Progress here typically comes through hands-on experiences, consistent practice, physical training, and real-world social interactions, allowing us to effectively translate our inner growth into external results and meaningful connections with others.",
         ]);
     }
 
