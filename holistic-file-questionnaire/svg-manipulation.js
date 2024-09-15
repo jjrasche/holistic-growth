@@ -129,8 +129,8 @@ function renderSectorTitle(sector) {
 export function typeOfEffertOverlay() {
     return [
         createInternalExternalLineElement(),
-        createInternalDescriptionElement(),
-        createExternalDescriptionElement(),
+        // createInternalDescriptionElement(),
+        // createExternalDescriptionElement(),
         createExternalLabelElement(),
         createInternalLabelElement(),
     ];
@@ -163,32 +163,25 @@ const defaultOverlayOptions = { fill: '#FFD700', opacity: 0.2, y: 0, width: 325,
 export function innerLandscapeOverlay() {
     let elements = typeOfEffertOverlay();
     const svg = document.getElementById('growth-wheel');
-    const options = { id: 'external-overlay', x: 325, ...defaultOverlayOptions};
-    const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    applyAttributes(overlay, options);
-    return elements.concat([overlay]);
-}
-
-export function outerExpressionOverlay() {
-    let elements = typeOfEffertOverlay();
-    const svg = document.getElementById('growth-wheel');
-    const options = { id: 'internal-overlay', x: 0, ...defaultOverlayOptions};
+    const options = { id: 'external-overlay', x: 0, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
     svg.appendChild(overlay);
     return elements.concat([overlay]);
 }
 
+export function outerExpressionOverlay() {
+    let elements = typeOfEffertOverlay();
+    const svg = document.getElementById('growth-wheel');
+    const options = { id: 'internal-overlay', x: 325, ...defaultOverlayOptions};
+    const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    applyAttributes(overlay, options);
+    svg.appendChild(overlay);
+    return elements.concat([overlay]);
+}
 
 function applyAttributes(element, options) {
     for (const [key, value] of Object.entries(options)) {
         element.setAttribute(key, value);
     }
-}
-
-
-// Function to remove the overlay
-export function removeOverlay() {
-    document.getElementById('internal-overlay')?.remove();
-    document.getElementById('external-overlay')?.remove();
 }

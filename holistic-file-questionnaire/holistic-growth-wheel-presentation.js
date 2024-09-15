@@ -17,9 +17,9 @@ export class HolisticGrowthWheelPresentation extends Presentation {
             () => this.physicalDomain(),
             () => this.mentalDomain(),
         ]); 
+        this.stageElements = [];
         this.wheelContainer = document.querySelector('.wheel-container');
         this.createTextArea();
-        this.stageElements = [];
         this.initialize();
     }
     
@@ -40,11 +40,8 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
     
     resetPresentation() {
-        unHighlightAllSections();
-        this.removeInternalExternalLines();
-        this.removeSufferingJoyArrow();
-        this.removeInternalDescription();
         closePopup();
+        unHighlightAllSections();
         this.clearTextArea();
         this.stageElements.forEach(e => e.remove());
     }
@@ -92,21 +89,21 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
     
     typeOfEffortDivide() {
-        this.stageElements.concat(typeOfEffertOverlay());
+        this.stageElements = [...this.stageElements, ...typeOfEffertOverlay()];
         this.displayText("Internal / External Growth Focus",[
             "The Holistic Growth Wheel is fundamentally divided into two halves, representing the dual nature of personal development. This division reflects the distinction between our inner world and our outer expression, each requiring different approaches and focuses for growth. Understanding this divide is crucial for creating a balanced and comprehensive personal development strategy.",
         ]);
     }
 
     innerLandscape() {
-        innerLandscapeOverlay();
+        this.stageElements = [...this.stageElements, ...innerLandscapeOverlay()];
         this.displayText("Internal Growth Focus",[
             "The left side of the wheel represents our inner landscape, encompassing the Emotional and Mental domains. This is the realm of introspection, self-awareness, and cognitive processes. Growth in these areas requires us to turn our attention inward, examining our thoughts, feelings, beliefs, and motivations. It involves developing emotional intelligence, reshaping our mindset, refining our inner dialogue, and cultivating resilience. Progress here often comes through practices like meditation, self-reflection, journaling, and therapy, which help us navigate and reshape our internal world.",
         ]);
     }
 
     outerExpression() {
-        outerExpressionOverlay();
+        this.stageElements = [...this.stageElements, ...outerExpressionOverlay()];
         this.displayText("External Growth Focus",[
             "The right side of the wheel represents our outer expression, comprising the Social and Physical domains. This is the arena where we interact with the world around us, manifesting our inner growth through tangible actions and relationships. Development in these areas necessitates active engagement with our environment, practicing new skills, and adapting our behaviors. It involves improving our communication, building relationships, enhancing our physical health, and developing new competencies. Progress here typically comes through hands-on experiences, consistent practice, physical training, and real-world social interactions, allowing us to effectively translate our inner growth into external results and meaningful connections with others.",
         ]);
@@ -138,17 +135,6 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
         descriptionBox.appendChild(descriptionContent);
         svg.appendChild(descriptionBox);
-    }
-
-    removeInternalExternalLines() {
-        document.getElementById('internal-external-line')?.remove();
-        document.getElementById('internal-label')?.remove();
-        document.getElementById('external-label')?.remove();
-        document.getElementById('internal-overlay')?.remove();
-    }
-
-    removeInternalDescription() {
-        document.getElementById('internal-description')?.remove();
     }
 
     domains() {
@@ -187,13 +173,6 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         svg.appendChild(sufferingLabel);
         svg.appendChild(joyLabel);
     }
-
-    removeSufferingJoyArrow() {
-        document.getElementById('suffering-joy-arrow')?.remove();
-        document.getElementById('suffering-label')?.remove();
-        document.getElementById('joy-label')?.remove();
-    }
-
 
     crisisToFlourishing() {
         const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
