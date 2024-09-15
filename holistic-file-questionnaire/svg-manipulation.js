@@ -10,7 +10,7 @@ export function createSVGWheel(interactive) {
     domains.forEach(domain => wheelGroup.appendChild(renderSector(domain, interactive)));
 }
 
-function createSVGElement(type, attributes) {
+export function createSVGElement(type, attributes) {
     const element = document.createElementNS('http://www.w3.org/2000/svg', type);
     for (const key in attributes) {
         element.setAttribute(key, attributes[key]);

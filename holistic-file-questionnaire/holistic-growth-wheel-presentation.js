@@ -8,10 +8,10 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super()
         this.setSlides([
-            () => this.typeOfEffortDivide(),
-            () => this.innerLandscape(),
-            () => this.outerExpression(),
-            () => this.introduction(),
+            // () => this.typeOfEffortDivide(),
+            // () => this.innerLandscape(),
+            // () => this.outerExpression(),
+            // () => this.introduction(),
             () => this.emotionalDomain(),
             () => this.socialDomain(),
             () => this.physicalDomain(),
