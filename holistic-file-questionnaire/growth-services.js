@@ -1,6 +1,6 @@
 import { serviceAreas } from './constants.js';
 import { closePopup } from './popup.js';
-import { unHighlightAllSections, highlighSection } from './wheel-manipulation.js';
+import { unHighlightAllSections, highlightSection } from './wheel-manipulation.js';
 
 
 function highlightServiceAreas(service) {
@@ -8,7 +8,7 @@ function highlightServiceAreas(service) {
     if (service && serviceInfo) {
         unHighlightAllSections();
         for (const domain in serviceInfo.areas) {
-            serviceInfo.areas[domain].forEach(state => highlighSection(domain, state));
+            serviceInfo.areas[domain].forEach(state => highlightSection(domain, state));
         }
     }
     closePopup();

@@ -126,30 +126,6 @@ function renderSectorTitle(sector) {
     sector.svg.appendChild(domainLabel);
 }
 
-export function typeOfEffertOverlay() {
-    return [
-        createInternalExternalLineElement(),
-        // createInternalDescriptionElement(),
-        // createExternalDescriptionElement(),
-        createExternalLabelElement(),
-        createInternalLabelElement(),
-    ];
-}
-
-const createInternalExternalLineElement = () => createElement('line', { id: 'internal-external-line', x1: 325, y1: 0, x2: 325, y2: 650, stroke: 'black', 'stroke-dasharray': '5,5' });
-const createInternalDescriptionElement = () => createElement('foreignObject', { id: 'internal-description', x: 340, y: 70, width: 300, height: 100 });
-const createExternalDescriptionElement = () => createElement('foreignObject', { id: 'external-description', x: 10, y: 70, width: 300, height: 100 });
-const createExternalLabelElement = () => {
-    const e = createElement('text', { id: 'external-label', x: 490, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
-    e.textContent = 'External';
-    return e
-};
-const createInternalLabelElement = () => {
-    const e = createElement('text', { id: 'internal-label', x: 160, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
-    e.textContent = 'Internal'
-    return e;
-}
-
 function createElement(tag, options) {
     const svg = document.getElementById('growth-wheel');
     const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -158,12 +134,46 @@ function createElement(tag, options) {
     return element;
 }
 
-const defaultOverlayOptions = { fill: '#FFD700', opacity: 0.2, y: 0, width: 325, height: 650 };
+export function typeOfEffertOverlay() {
+    const internalExternalLineElement = createElement('line', { id: 'line', x1: 325, y1: 0, x2: 325, y2: 650, stroke: 'black', 'stroke-dasharray': '5,5' });
+    const externalLabelElement = createElement('text', { id: 'external-label', x: 490, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    externalLabelElement.textContent = `External Efforts`;
+    const internalLabelElement = createElement('text', { id: 'internal-label', x: 160, y: 50, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    internalLabelElement.textContent = 'Internal Efforts'
+    return [ internalExternalLineElement, externalLabelElement, internalLabelElement ];
+}
 
+export function measureGrowthOverlay() {
+    const horizontalLineElement = createElement('line', { id: 'line', x1: 0, y1: 325, x2: 650, y2: 325, stroke: 'black', 'stroke-dasharray': '5,5' });
+    
+    const subjectiveLabelElement = createElement('text', { 
+        id: 'subjective-label', 
+        x: 325, 
+        y: 50, 
+        'text-anchor': 'middle', 
+        'font-size': 24, 
+        'font-weight': 'bold' 
+    });
+    subjectiveLabelElement.textContent = 'Subjective Measures';
+    
+    const objectiveLabelElement = createElement('text', { 
+        id: 'objective-label', 
+        x: 325, 
+        y: 600, 
+        'text-anchor': 'middle', 
+        'font-size': 24, 
+        'font-weight': 'bold' 
+    });
+    objectiveLabelElement.textContent = 'Objective Measures';
+    
+    return [horizontalLineElement, subjectiveLabelElement, objectiveLabelElement];
+}
+
+const defaultOverlayOptions = { fill: '#FFD700', opacity: 0.2 };
 export function innerLandscapeOverlay() {
     let elements = typeOfEffertOverlay();
     const svg = document.getElementById('growth-wheel');
-    const options = { id: 'external-overlay', x: 0, ...defaultOverlayOptions};
+    const options = { id: 'overlay', x: 0, y: 0, width: 325, height: 650, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
     svg.appendChild(overlay);
@@ -173,7 +183,27 @@ export function innerLandscapeOverlay() {
 export function outerExpressionOverlay() {
     let elements = typeOfEffertOverlay();
     const svg = document.getElementById('growth-wheel');
-    const options = { id: 'internal-overlay', x: 325, ...defaultOverlayOptions};
+    const options = { id: 'overlay', x: 325, y: 0, width: 325, height: 650, ...defaultOverlayOptions};
+    const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    applyAttributes(overlay, options);
+    svg.appendChild(overlay);
+    return elements.concat([overlay]);
+}
+
+export function subjectiveMeasuresOverlay() {
+    let elements = measureGrowthOverlay();
+    const svg = document.getElementById('growth-wheel');
+    const options = { id: 'overlay', y: 0, x: 0, width: 650, height: 325, ...defaultOverlayOptions };
+    const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    applyAttributes(overlay, options);
+    svg.appendChild(overlay);
+    return elements.concat([overlay]);
+}
+
+export function objectiveMeasuresOverlay() {
+    let elements = measureGrowthOverlay();
+    const svg = document.getElementById('growth-wheel');
+    const options = { id: 'overlay', y: 325, x: 0, width: 650, height: 325, ...defaultOverlayOptions };
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
     svg.appendChild(overlay);

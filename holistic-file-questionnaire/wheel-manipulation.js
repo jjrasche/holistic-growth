@@ -9,22 +9,36 @@ export function unHighlightAllSections() {
     });
 }
 
-export function highlighSection(domain, state) {   
+export function highlightSection(domain, state) {   
     const path = document.querySelector(`path[data-domain="${domain}"][data-state="${state}"]`);
     if (path) {
         path.setAttribute('fill-opacity', highlightOpacity);
     }
 }
 
-export function highlighDomain(domain) {   
-    states.forEach(state => highlighSection(domain, state));
+export function highlightDomain(domain) {   
+    states.forEach(state => highlightSection(domain, state));
+    const label = document.querySelector(`text[data-domain="${domain}"]`);
+    if (label) {
+        label.setAttribute('font-size', '28');
+        label.setAttribute('font-weight', '850');
+    }
+}
+
+export function unHighlightDomain(domain) {
+    unHighlightAllSections();
+    const label = document.querySelector(`text[data-domain="${domain}"]`);
+    if (label) {
+        label.setAttribute('font-size', '22');
+        label.setAttribute('font-weight', 'bold');
+    }
 }
 
 export function handleSectionClick(event) {
     const domain = event.target.getAttribute('data-domain');
     const state = event.target.getAttribute('data-state');
     unHighlightAllSections();
-    highlighSection(domain, state);
+    highlightSection(domain, state);
     openSectionPopup(domain, state)
 }
 

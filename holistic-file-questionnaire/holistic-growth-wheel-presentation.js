@@ -1,21 +1,24 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
-import { highlighDomain, highlighSection, unHighlightAllSections } from "./wheel-manipulation.js";
-import { emotional, mental, physical, social } from './constants.js';
-import { innerLandscapeOverlay, outerExpressionOverlay, typeOfEffertOverlay } from './svg-manipulation.js';
+import { highlightDomain, highlightSection, unHighlightAllSections, unHighlightDomain } from "./wheel-manipulation.js";
+import { domains, emotional, mental, physical, social } from './constants.js';
+import { innerLandscapeOverlay, measureGrowthOverlay, objectiveMeasuresOverlay, outerExpressionOverlay, subjectiveMeasuresOverlay, typeOfEffertOverlay } from './svg-manipulation.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super()
         this.setSlides([
-            // () => this.typeOfEffortDivide(),
-            // () => this.innerLandscape(),
-            // () => this.outerExpression(),
-            // () => this.introduction(),
+            () => this.introduction(),
             () => this.emotionalDomain(),
             () => this.socialDomain(),
             () => this.physicalDomain(),
             () => this.mentalDomain(),
+            () => this.typeOfEffortDivide(),
+            () => this.innerLandscape(),
+            () => this.outerExpression(),
+            () => this.measureGrowthDivide(),
+            () => this.subjectiveGrowth(),
+            () => this.objectiveGrowth(),
         ]); 
         this.stageElements = [];
         this.wheelContainer = document.querySelector('.wheel-container');
@@ -44,6 +47,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         unHighlightAllSections();
         this.clearTextArea();
         this.stageElements.forEach(e => e.remove());
+        domains.forEach(d => unHighlightDomain(d));
     }
 
     introduction() {
@@ -53,7 +57,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
     emotionalDomain() {
-        highlighDomain(emotional);
+        highlightDomain(emotional);
         this.displayText("Emotional Domain",[
             "Your emotional well-being provides the foundation of your inner world. Your emotional state is the basis for how you interact with everything around you.",
             "Involves wellbeing, resilience, and purpose and impacts how you handle stress, process grief, or cultivate joy.",
@@ -62,7 +66,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
     socialDomain() {
-        highlighDomain(social);
+        highlightDomain(social);
         this.displayText("Social Domain",[
             "Social well-being is rooted in the relationships that support, challenge, and enrich you. It's highlighted in how you connect with others and communicate ideas. Social well beimg influences your sense of belonging. It empowers you to both contribute to and draw strength from your community.",
             "Involves communication, empathy, and interpersonal skills. It impacts your relationships, community contributions, and your dynamic in social situations.",
@@ -71,16 +75,17 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
     mentalDomain() {
-        highlighDomain(mental);
+        highlightDomain(mental);
         this.displayText("Mental Domain",[
             "Mental well-being shapes how you perceive and interact with the world. It's the lens through which you interpret experiences, solve problems, and make decisions. A healthy mental state empowers you to learn, adapt, and thrive in an ever-changing environment.",
             "Involves mindset, learning, and critical thinking. It impacts how you perceive, acquire knowledge, solve problems, and express creativity.",
             "Success is creating effective strategies to overcome challenges, continuously learning and adapting from experiences, and developing optimal problem-solving skills.",
         ]);
+
     }
 
     physicalDomain() {
-        highlighDomain(physical);
+        highlightDomain(physical);
         this.displayText("Physical Domain",[
             "Physical well-being is the foundation of how you engage in the world. It often influences your mood and cognitive function. A strong physical state allows you to fully engage in life's activities.",
             "Involves bodily awareness, nutrition, and physical routines. It impacts your health, energy levels, and overall physical capabilities.",
@@ -108,42 +113,28 @@ export class HolisticGrowthWheelPresentation extends Presentation {
             "The right side of the wheel represents our outer expression, comprising the Social and Physical domains. This is the arena where we interact with the world around us, manifesting our inner growth through tangible actions and relationships. Development in these areas necessitates active engagement with our environment, practicing new skills, and adapting our behaviors. It involves improving our communication, building relationships, enhancing our physical health, and developing new competencies. Progress here typically comes through hands-on experiences, consistent practice, physical training, and real-world social interactions, allowing us to effectively translate our inner growth into external results and meaningful connections with others.",
         ]);
     }
-
-    internalDescription() {
-        const svg = document.getElementById('growth-wheel');
-        
-        const descriptionBox = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-        descriptionBox.setAttribute('x', '340');
-        descriptionBox.setAttribute('y', '20');
-        descriptionBox.setAttribute('width', '290');
-        descriptionBox.setAttribute('height', '200');
-        descriptionBox.setAttribute('id', 'internal-description');
-
-        const descriptionContent = document.createElement('div');
-        descriptionContent.innerHTML = `
-            <h3 style="margin: 0; color: #333;">Internal Domains</h3>
-            <p style="margin-top: 10px; font-size: 14px; color: #555;">
-                The right half of the wheel represents internal domains:
-                <ul style="margin-top: 5px; padding-left: 20px;">
-                    <li><strong>Emotional:</strong> Feelings, resilience, and self-awareness</li>
-                    <li><strong>Mental:</strong> Thoughts, beliefs, and cognitive processes</li>
-                </ul>
-                These domains focus on your inner world and personal growth.
-            </p>
-        `;
-        descriptionContent.style.cssText = 'background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;';
-
-        descriptionBox.appendChild(descriptionContent);
-        svg.appendChild(descriptionBox);
+    
+    measureGrowthDivide() {
+        this.stageElements = [...this.stageElements, ...measureGrowthOverlay()];
+        this.displayText("Subjective / Objective Growth Measuring",[
+            "The Holistic Growth Wheel can also be divided by top and bottom. The horizontal division separates the domains based on how you measure growth. With the growth in the top domains measured through subjective experience and soft skill development. The bottom domains show results with improvement in objective capabilities and hard skills.",
+        ]);
     }
 
-    domains() {
-        const domains = ['Emotional', 'Mental', 'Physical', 'Social'];
-        domains.forEach((domain, index) => {
-            setTimeout(() => {
-                openDomainPopup(domain);
-            }, index * 1000);
-        });
+    subjectiveGrowth() {
+        this.stageElements = [...this.stageElements, ...subjectiveMeasuresOverlay()];
+        this.displayText("Subjective Growth Measurement",[
+            "The top half of the wheel, encompassing the Emotional and Social domains, represents subjective areas of growth that are inherently challenging to measure. Progress in these domains is typically gauged through self-reported improvements in well-being, relationship quality, and social connections. However, these soft skills like emotional intelligence, empathy, and interpersonal communication, can help you more broadly in life situations.",
+            "While the results of development in these areas are often intangible, you'll feel the difference in improved interactions and relationships. Life's going to generally seem easeir. Improvement in these areas should feel like things are starting to click. There are some methods to quantify progress, such as feedback surveys or emotional intelligence assessments. However, these measurements are inherently less precise and more open to interpretation than those in the lower half."
+        ]);
+    }
+
+    objectiveGrowth() {
+        this.stageElements = [...this.stageElements, ...objectiveMeasuresOverlay()];
+        this.displayText("Objective Growth Measurement",[
+            "The bottom half, comprising the Mental and Physical domains, focuses on objective capabilities that can be measured more concretely through standardized tests, athletic feets, and tangible achievements. These hard skills improve your performance at specific tasks or problem-solving scenarios.",
+            "Development in these domains often produce quicker and more obvious improvement. For instance, using a mobile app to improve memorization will have a testing component where you can track progress over time. The specificity of these hard skills often translates to clear, task-oriented benefits, contrasting with the more generally applicable nature of soft skills.",
+        ]);
     }
 
     sufferingJoyRings() {
@@ -178,7 +169,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
         states.forEach((state, index) => {
             setTimeout(() => {
-                highlighSection('Physical', state);
+                highlightSection('Physical', state);
                 openSectionPopup('Physical', state);
             }, index * 1000);
         });
