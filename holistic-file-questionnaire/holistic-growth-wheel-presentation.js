@@ -1,8 +1,9 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlightDomain, highlightSection, unHighlightAllSections, unHighlightDomain } from "./wheel-manipulation.js";
-import { domains, emotional, mental, physical, social } from './constants.js';
+import { colors, domains, states, emotional, mental, physical, social } from './constants.js';
 import { innerLandscapeOverlay, measureGrowthOverlay, objectiveMeasuresOverlay, outerExpressionOverlay, subjectiveMeasuresOverlay, typeOfEffertOverlay } from './svg-manipulation.js';
+import { createSVGElement } from './svg-manipulation.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
@@ -19,6 +20,8 @@ export class HolisticGrowthWheelPresentation extends Presentation {
             () => this.measureGrowthDivide(),
             () => this.subjectiveGrowth(),
             () => this.objectiveGrowth(),
+            () => this.statesWithin(),
+            ...this.statesSlides(),
         ]); 
         this.stageElements = [];
         this.wheelContainer = document.querySelector('.wheel-container');
@@ -137,42 +140,127 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         ]);
     }
 
-    sufferingJoyRings() {
-        const svg = document.getElementById('growth-wheel');
-        
-        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        arrow.setAttribute('d', 'M 325,80 L 325,240 L 315,230 M 325,240 L 335,230');
-        arrow.setAttribute('stroke', 'black');
-        arrow.setAttribute('fill', 'none');
-        arrow.setAttribute('id', 'suffering-joy-arrow');
-
-        const sufferingLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        sufferingLabel.setAttribute('x', '325');
-        sufferingLabel.setAttribute('y', '70');
-        sufferingLabel.setAttribute('text-anchor', 'middle');
-        sufferingLabel.textContent = 'Suffering';
-        sufferingLabel.setAttribute('id', 'suffering-label');
-
-        const joyLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        joyLabel.setAttribute('x', '325');
-        joyLabel.setAttribute('y', '260');
-        joyLabel.setAttribute('text-anchor', 'middle');
-        joyLabel.textContent = 'Joy';
-        joyLabel.setAttribute('id', 'joy-label');
-
-        svg.appendChild(arrow);
-        svg.appendChild(sufferingLabel);
-        svg.appendChild(joyLabel);
+    objectiveGrowth() {
+        this.stageElements = [...this.stageElements, ...objectiveMeasuresOverlay()];
+        this.displayText("Objective Growth Measurement",[
+            "The bottom half, comprising the Mental and Physical domains, focuses on objective capabilities that can be measured more concretely through standardized tests, athletic feets, and tangible achievements. These hard skills improve your performance at specific tasks or problem-solving scenarios.",
+            "Development in these domains often produce quicker and more obvious improvement. For instance, using a mobile app to improve memorization will have a testing component where you can track progress over time. The specificity of these hard skills often translates to clear, task-oriented benefits, contrasting with the more generally applicable nature of soft skills.",
+        ]);
     }
 
-    crisisToFlourishing() {
-        const states = ['Crisis', 'Stagnant', 'Growth', 'Flourishing'];
-        states.forEach((state, index) => {
-            setTimeout(() => {
-                highlightSection('Physical', state);
-                openSectionPopup('Physical', state);
-            }, index * 1000);
+    statesWithin() {
+        this.createCrisisToFlourishingAnimation();
+        this.playCrisisToFlourishingAnimation();
+        this.displayText("The Journey from Suffering to Joy", [
+            "As we move from the inner circle to the outer circle of the Holistic Growth Wheel, we transition from states of suffering towards states of joy. This journey is represented by four distinct states: Crisis, Stagnant, Growth, and Flourishing.",
+            "It's important to understand that these states are not arbitrary. They reflect your personal experiences and perceptions. What one person considers a crisis might not be a crisis for another. Your current state is often influenced by the depths you've experienced and the peaks you've reached in comparison to where you are now.",
+            "However, there are also objective ways to assess your state in each domain. A set of basic needs, when met, can help you understand if you're objectively in a crisis or not. Let's explore each state in more detail:"
+        ]);
+    }
+
+    createCrisisToFlourishingAnimation() {
+        const svg = document.getElementById('growth-wheel');
+        const animationGroup = createSVGElement('g', { id: 'animation-group' });
+        svg.appendChild(animationGroup);
+    
+        // Create the path
+        const path = createSVGElement('path', {
+            d: 'M 300,300 Q 300,200 400,200 T 500,300',
+            fill: 'none',
+            stroke: 'black',
+            'stroke-width': '2',
+            'stroke-dasharray': '5,5',
+            id: 'animation-path'
         });
+        animationGroup.appendChild(path);
+    
+        // Create the moving circle
+        const circle = createSVGElement('circle', {
+            r: '10',
+            fill: colors[0],
+            id: 'moving-circle'
+        });
+        animationGroup.appendChild(circle);
+    
+        // Create labels for each state
+        states.forEach((state, index) => {
+            const label = createSVGElement('text', {
+                x: 300 + (index * 66),
+                y: 190,
+                'text-anchor': 'middle',
+                'font-size': '12',
+                fill: 'black',
+                id: `${state.toLowerCase()}-label`
+            });
+            label.textContent = state;
+            animationGroup.appendChild(label);
+        });
+    
+        // Animate the circle along the path
+        const animateMotion = createSVGElement('animateMotion', {
+            dur: '10s',
+            repeatCount: 'indefinite',
+            path: 'M 0,0 Q 0,-100 100,-100 T 200,0'
+        });
+        circle.appendChild(animateMotion);
+    
+        // Change circle color along the animation
+        const animateColor = createSVGElement('animate', {
+            attributeName: 'fill',
+            dur: '10s',
+            repeatCount: 'indefinite',
+            values: colors.join(';'),
+            calcMode: 'linear'
+        });
+        circle.appendChild(animateColor);
+    }
+    
+    playCrisisToFlourishingAnimation() {
+        const circle = document.getElementById('moving-circle');
+        const animateMotion = circle.querySelector('animateMotion');
+        const animateColor = circle.querySelector('animate');
+    
+        animateMotion.beginElement();
+        animateColor.beginElement();
+    }
+    
+    stopCrisisToFlourishingAnimation() {
+        const circle = document.getElementById('moving-circle');
+        const animateMotion = circle.querySelector('animateMotion');
+        const animateColor = circle.querySelector('animate');
+    
+        animateMotion.endElement();
+        animateColor.endElement();
+    }
+
+    statesSlides() {
+        return states.map(state => () => this.highlightAndExplainState(state));
+    }
+
+    highlightAndExplainState(state) {
+        domains.forEach(domain => highlightSection(domain, state));
+        
+        let description, characteristics;
+        switch(state) {
+            case 'Crisis':
+                description = "The innermost circle represents a state of crisis. This is typically characterized by intense suffering or struggle.";
+                characteristics = "In crisis, you may feel overwhelmed, stuck, or unable to meet basic needs in a particular domain. It's important to remember that being in crisis is not a permanent state and that help is available.";
+                break;
+            case 'Stagnant':
+                description = "Moving outward, we reach the stagnant state. Here, the acute suffering of crisis has subsided, but growth is not yet occurring.";
+                characteristics = "In a stagnant state, you're able to meet basic needs but may feel unfulfilled or stuck. This state often serves as a crucial resting period between crisis and growth.";
+                break;
+            case 'Growth':
+                description = "The next circle represents a state of growth. This is where positive change and development begin to occur.";
+                characteristics = "In a growth state, you're actively working on improving aspects of your life in this domain. You may face challenges, but you're making progress and learning from your experiences.";
+                break;
+            case 'Flourishing':
+                description = "The outermost circle represents a state of flourishing, characterized by joy, fulfillment, and thriving.";
+                characteristics = "When flourishing, you're not just meeting your needs but excelling in this domain. You may find yourself able to help others and contribute to your community in meaningful ways.";
+                break;
+        }
+
+        this.displayText(`${state} State`, [description, characteristics]);
     }
 }
 
