@@ -19,19 +19,23 @@ export function highlightSection(domain, state) {
 export function highlightDomain(domain) {   
     states.forEach(state => highlightSection(domain, state));
     const label = document.querySelector(`text[data-domain="${domain}"]`);
-    if (label) {
-        label.setAttribute('font-size', '28');
-        label.setAttribute('font-weight', '850');
-    }
+    highlightLabel(label);
+}
+
+export function highlightLabel(label) {
+    label.setAttribute('font-size', '28');
+    label.setAttribute('font-weight', '850');
+}
+
+export function normalizeLabel(label) {
+    label.setAttribute('font-size', '22');
+    label.setAttribute('font-weight', 'bold');
 }
 
 export function unHighlightDomain(domain) {
     unHighlightAllSections();
     const label = document.querySelector(`text[data-domain="${domain}"]`);
-    if (label) {
-        label.setAttribute('font-size', '22');
-        label.setAttribute('font-weight', 'bold');
-    }
+    normalizeLabel(label);
 }
 
 export function handleSectionClick(event) {

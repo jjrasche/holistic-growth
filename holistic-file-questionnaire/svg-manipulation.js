@@ -1,4 +1,4 @@
-import { handleSectionClick } from "./wheel-manipulation.js"
+import { handleSectionClick, highlightLabel } from "./wheel-manipulation.js"
 import { domains, states, colors, unHighlightOpacity } from "./constants.js";
 import { handleDomainClick } from "./wheel-manipulation.js";
 
@@ -141,9 +141,9 @@ const overlayLabelPadding = 50;
 
 export function typeOfEffertOverlay() {
     const internalExternalLineElement = createElement('line', { id: 'line', x1: svgWidth/2, y1: 0, x2: svgWidth/2, y2: svgHeight, stroke: 'black', 'stroke-dasharray': '5,5' });
-    const externalLabelElement = createElement('text', { id: 'external-label', x: '75%' , y: overlayLabelPadding, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    const externalLabelElement = createElement('text', { id: 'external-label', x: '75%' , y: overlayLabelPadding, 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 'bold' });
     externalLabelElement.textContent = `External Efforts`;
-    const internalLabelElement = createElement('text', { id: 'internal-label', x: '25%', y: overlayLabelPadding, 'text-anchor': 'middle', 'font-size': 24, 'font-weight': 'bold' });
+    const internalLabelElement = createElement('text', { id: 'internal-label', x: '25%', y: overlayLabelPadding, 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 'bold' });
     internalLabelElement.textContent = 'Internal Efforts'
     return [ internalExternalLineElement, externalLabelElement, internalLabelElement ];
 }
@@ -161,6 +161,7 @@ export function measureGrowthOverlay() {
 const defaultOverlayOptions = { fill: '#FFD700', opacity: 0.2 };
 export function innerLandscapeOverlay() {
     let elements = typeOfEffertOverlay();
+    highlightLabel(elements.find(e => e.id == 'internal-label'));
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'overlay', x: 0, y: 0, width: svgWidth/2, height: svgHeight, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -171,6 +172,7 @@ export function innerLandscapeOverlay() {
 
 export function outerExpressionOverlay() {
     let elements = typeOfEffertOverlay();
+    highlightLabel(elements.find(e => e.id == 'external-label'));
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'overlay', x: svgWidth/2, y: 0, width: svgWidth/2, height: svgHeight, ...defaultOverlayOptions};
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -181,6 +183,7 @@ export function outerExpressionOverlay() {
 
 export function subjectiveMeasuresOverlay() {
     let elements = measureGrowthOverlay();
+    highlightLabel(elements.find(e => e.id == 'subjective-label'))
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'overlay', y: 0, x: 0, width: svgWidth, height: svgHeight/2, ...defaultOverlayOptions };
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -191,6 +194,7 @@ export function subjectiveMeasuresOverlay() {
 
 export function objectiveMeasuresOverlay() {
     let elements = measureGrowthOverlay();
+    highlightLabel(elements.find(e => e.id == 'objective-label'))
     const svg = document.getElementById('growth-wheel');
     const options = { id: 'overlay', y: svgHeight/2, x: 0, width: svgWidth, height: svgHeight/2, ...defaultOverlayOptions };
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -203,4 +207,35 @@ function applyAttributes(element, options) {
     for (const [key, value] of Object.entries(options)) {
         element.setAttribute(key, value);
     }
+}
+
+
+export function sufferingToJoy() {
+    const svg = document.getElementById('growth-wheel');
+    const centerX = svgWidth / 2;
+    const centerY = svgHeight / 2;
+    const radius = Math.min(svgWidth, svgHeight) / 2 - 135; // Slightly smaller than the wheel
+    const angle = Math.PI ; // 45 degrees in radians
+
+    const endX = centerX + radius * Math.cos(angle);
+    const endY = centerY + radius * Math.sin(angle);
+    
+    // Create arrow
+    const arrow = createElement('path', { 'd': `M ${centerX - 50},${centerY} L ${endX},${endY}`, 'stroke': 'black', 'stroke-width': '5', 'marker-end': 'url(#arrowhead)', 'id': 'suffering-joy-arrow' });
+
+    // Create arrowhead
+    const defs = createElement('defs', {});
+    const marker = createElement('marker', { id: 'arrowhead', markerWidth: '10', markerHeight: '7', refX: '0', refY: '3.5', orient: 'auto' });
+    const polygon = createElement('polygon', { points: '0 0, 10 3.5, 0 7' });
+    marker.appendChild(polygon);
+    defs.appendChild(marker);
+
+    // Create labels
+    const sufferingLabel = createElement('text', { id: 'suffering-label', x: centerX, y: centerY + 5, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 'bold' });
+    sufferingLabel.textContent = 'Suffering'
+    const joyLabel = createElement('text', { id: 'joy-label', x: endX - 110, y: centerY + 5, 'text-anchor': 'start', 'font-size': 20, 'font-weight': 'bold' });
+    joyLabel.textContent = 'Joy'
+
+    return [arrow, defs, marker, polygon, sufferingLabel, joyLabel]
+
 }
