@@ -1,25 +1,24 @@
 import { Presentation } from './presentation-base.js';
 import { openDomainPopup, openSectionPopup, closePopup } from "./popup.js";
 import { highlightDomain, highlightSection, unHighlightAllSections, unHighlightDomain } from "./wheel-manipulation.js";
-import { colors, domains, states, emotional, mental, physical, social } from './constants.js';
+import { domains, states, emotional, mental, physical, social } from './constants.js';
 import { innerLandscapeOverlay, measureGrowthOverlay, objectiveMeasuresOverlay, outerExpressionOverlay, subjectiveMeasuresOverlay, typeOfEffertOverlay } from './svg-manipulation.js';
-import { createSVGElement } from './svg-manipulation.js';
 
 export class HolisticGrowthWheelPresentation extends Presentation {
     constructor() {
         super()
         this.setSlides([
-            () => this.introduction(),
-            () => this.emotionalDomain(),
-            () => this.socialDomain(),
-            () => this.physicalDomain(),
-            () => this.mentalDomain(),
-            () => this.typeOfEffortDivide(),
-            () => this.innerLandscape(),
-            () => this.outerExpression(),
-            () => this.measureGrowthDivide(),
-            () => this.subjectiveGrowth(),
-            () => this.objectiveGrowth(),
+            // () => this.introduction(),
+            // () => this.emotionalDomain(),
+            // () => this.socialDomain(),
+            // () => this.physicalDomain(),
+            // () => this.mentalDomain(),
+            // () => this.typeOfEffortDivide(),
+            // () => this.innerLandscape(),
+            // () => this.outerExpression(),
+            // () => this.measureGrowthDivide(),
+            // () => this.subjectiveGrowth(),
+            // () => this.objectiveGrowth(),
             () => this.statesWithin(),
             ...this.statesSlides(),
         ]); 
@@ -149,8 +148,8 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     }
 
     statesWithin() {
-        this.createCrisisToFlourishingAnimation();
-        this.playCrisisToFlourishingAnimation();
+        this.sufferingToJoy();
+
         this.displayText("The Journey from Suffering to Joy", [
             "As we move from the inner circle to the outer circle of the Holistic Growth Wheel, we transition from states of suffering towards states of joy. This journey is represented by four distinct states: Crisis, Stagnant, Growth, and Flourishing.",
             "It's important to understand that these states are not arbitrary. They reflect your personal experiences and perceptions. What one person considers a crisis might not be a crisis for another. Your current state is often influenced by the depths you've experienced and the peaks you've reached in comparison to where you are now.",
@@ -158,79 +157,32 @@ export class HolisticGrowthWheelPresentation extends Presentation {
         ]);
     }
 
-    createCrisisToFlourishingAnimation() {
+    sufferingToJoy() {
         const svg = document.getElementById('growth-wheel');
-        const animationGroup = createSVGElement('g', { id: 'animation-group' });
-        svg.appendChild(animationGroup);
-    
-        // Create the path
-        const path = createSVGElement('path', {
-            d: 'M 300,300 Q 300,200 400,200 T 500,300',
-            fill: 'none',
-            stroke: 'black',
-            'stroke-width': '2',
-            'stroke-dasharray': '5,5',
-            id: 'animation-path'
-        });
-        animationGroup.appendChild(path);
-    
-        // Create the moving circle
-        const circle = createSVGElement('circle', {
-            r: '10',
-            fill: colors[0],
-            id: 'moving-circle'
-        });
-        animationGroup.appendChild(circle);
-    
-        // Create labels for each state
-        states.forEach((state, index) => {
-            const label = createSVGElement('text', {
-                x: 300 + (index * 66),
-                y: 190,
-                'text-anchor': 'middle',
-                'font-size': '12',
-                fill: 'black',
-                id: `${state.toLowerCase()}-label`
-            });
-            label.textContent = state;
-            animationGroup.appendChild(label);
-        });
-    
-        // Animate the circle along the path
-        const animateMotion = createSVGElement('animateMotion', {
-            dur: '10s',
-            repeatCount: 'indefinite',
-            path: 'M 0,0 Q 0,-100 100,-100 T 200,0'
-        });
-        circle.appendChild(animateMotion);
-    
-        // Change circle color along the animation
-        const animateColor = createSVGElement('animate', {
-            attributeName: 'fill',
-            dur: '10s',
-            repeatCount: 'indefinite',
-            values: colors.join(';'),
-            calcMode: 'linear'
-        });
-        circle.appendChild(animateColor);
-    }
-    
-    playCrisisToFlourishingAnimation() {
-        const circle = document.getElementById('moving-circle');
-        const animateMotion = circle.querySelector('animateMotion');
-        const animateColor = circle.querySelector('animate');
-    
-        animateMotion.beginElement();
-        animateColor.beginElement();
-    }
-    
-    stopCrisisToFlourishingAnimation() {
-        const circle = document.getElementById('moving-circle');
-        const animateMotion = circle.querySelector('animateMotion');
-        const animateColor = circle.querySelector('animate');
-    
-        animateMotion.endElement();
-        animateColor.endElement();
+        
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arrow.setAttribute('d', 'M 325,80 L 325,240 L 315,230 M 325,240 L 335,230');
+        arrow.setAttribute('stroke', 'black');
+        arrow.setAttribute('fill', 'none');
+        arrow.setAttribute('id', 'suffering-joy-arrow');
+
+        const sufferingLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        sufferingLabel.setAttribute('x', '325');
+        sufferingLabel.setAttribute('y', '70');
+        sufferingLabel.setAttribute('text-anchor', 'middle');
+        sufferingLabel.textContent = 'Suffering';
+        sufferingLabel.setAttribute('id', 'suffering-label');
+
+        const joyLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        joyLabel.setAttribute('x', '325');
+        joyLabel.setAttribute('y', '260');
+        joyLabel.setAttribute('text-anchor', 'middle');
+        joyLabel.textContent = 'Joy';
+        joyLabel.setAttribute('id', 'joy-label');
+
+        svg.appendChild(arrow);
+        svg.appendChild(sufferingLabel);
+        svg.appendChild(joyLabel);
     }
 
     statesSlides() {
