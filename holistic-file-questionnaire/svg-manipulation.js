@@ -167,7 +167,7 @@ export function innerLandscapeOverlay() {
     const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     applyAttributes(overlay, options);
     svg.appendChild(overlay);
-    return elements.concat([overlay]);
+    return elements.concat([overlay]);  
 }
 
 export function outerExpressionOverlay() {

@@ -21,6 +21,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
             () => this.objectiveGrowth(),
             () => this.statesWithin(),
             ...this.statesSlides(),
+            () => this.callToAction(),
         ]); 
         this.stageElements = [];
         this.wheelContainer = document.querySelector('.wheel-container');
@@ -164,27 +165,51 @@ export class HolisticGrowthWheelPresentation extends Presentation {
     highlightAndExplainState(state) {
         domains.forEach(domain => highlightSection(domain, state));
         
-        let description, characteristics;
+        let text
         switch(state) {
             case 'Crisis':
-                description = "The innermost circle represents a state of crisis. This is typically characterized by intense suffering or struggle.";
-                characteristics = "In crisis, you may feel overwhelmed, stuck, or unable to meet basic needs in a particular domain. It's important to remember that being in crisis is not a permanent state and that help is available.";
+                text = [
+                    "The specific situations and circumstances that cause someone to be in crisis vary greatly person to person.",
+                    "An emotional crisis represents any state where an individual struggles to cope with their feelings and emotions to a point that it significantly impacts their well-being, daily functioning, and overall quality of life.",
+                    "A mental crisis occurs when an individual experiences significant disruption to their cognitive processes, affecting their ability to think clearly and process information. The common thread is difficulty in maintaining normal mental operations or interrupting negative thought patterns.",
+                    "In a physical crisis, an individual encounters a severe disruption to their bodily functions or physical capabilities that significantly impairs their ability to perform basic tasks or maintain their usual level of independence.",
+                    "A social crisis manifests as a state where an individual faces significant challenges in forming, maintaining, or navigating interpersonal relationships, leading to isolation, disconnection, or conflict with others."
+                ]
                 break;
             case 'Stagnant':
-                description = "Moving outward, we reach the stagnant state. Here, the acute suffering of crisis has subsided, but growth is not yet occurring.";
-                characteristics = "In a stagnant state, you're able to meet basic needs but may feel unfulfilled or stuck. This state often serves as a crucial resting period between crisis and growth.";
+                text = [
+                    "<h4>Hallmarks</h4>",
+                    "<ul><li>May engage in sporadic self-improvement activities</li><li>Lack of consistent routines aimed at personal development</li><li>lack of self-reflection on vision or plan</li></ul>",
+                    "<h4>Sarah is Physiclly Stagnant</h4>",
+                    "Sarah considers herself fairly healthy. She goes to the gym sporadically, usually once or twice a month when she feels guilty about not exercising. She often thinks about eating better but hasn't made any concrete plans to change her diet. Sarah's weight has remained the same for years, and while she sometimes wishes she were fitter, she's not actively working towards that goal. She's content with her current state and doesn't see a pressing need for change. This lack of a clear plan, coupled with inconsistent actions and an absence of integrated routines aimed at improvement, places Sarah in a stagnant state in the physical domain.",
+                ];
                 break;
             case 'Growth':
-                description = "The next circle represents a state of growth. This is where positive change and development begin to occur.";
-                characteristics = "In a growth state, you're actively working on improving aspects of your life in this domain. You may face challenges, but you're making progress and learning from your experiences.";
+                text = [
+                    "<h4>Hallmarks</h4>",
+                    "<ul><li>Clear, specific goals and feasible plans to reach vision</li><li>Integrated plan into routines</li><li>Commitment to long-term progress despite short-term setbacks</li><li>Regular self-reflection and willingness to adjust strategies</li></ul>",
+                    "<h4>Michael is Focused on Mental Growth</h4>",
+                    "Michael has worked as lead mechanic at a repair shop for 5 years. Michael realized he's not fulfilled in his work and this is negatively impacting his life. Conversations with his support system led to some challenging self-reflections, where Michael rediscoverd his passion for teaching. Michael developed a vision to be an automative instructor by the end of the year. He understands he needs to learn instruction techniques so he built the routine  to digest content (pocasts, audiobooks) related to teaching on his 30 minute commute. He knows he'll need to develop curriculm so he devotes 20 minutes before bed to assemble material.Michael has consistently integrated these routines into his schedule for the past month, attaching them to established habits like driving and eating. He's had to adjust his approach, like listening to his teaching content while making dinner on Tuesdays when his Grandmother calls, but he knows consistent incremental improvement will get him where he wants to go. To apply his new knowledge in the real world, Michael introduced himself to the dean of a local vocational school and has come in twice for guest lectures. Despite occasional setbacks, like missing the routine last weekend to focus on a vacation, Michael maintained his commitment to growth. He's started thinking of his work differently. Previosuly boring parts of the job became interesting again thinking about how he'd explain it to a student. After a month of consistent routine building, Michael feels more engaged with life and has now substituted portfolio creation to his bed time routine. When done he will submit it with his resume to 3 area schools.",
+                ];
                 break;
             case 'Flourishing':
-                description = "The outermost circle represents a state of flourishing, characterized by joy, fulfillment, and thriving.";
-                characteristics = "When flourishing, you're not just meeting your needs but excelling in this domain. You may find yourself able to help others and contribute to your community in meaningful ways.";
-                break;
+                text = [
+                "<h4>Hallmarks</h4>",
+                "<ul><li>General satisfaction and fulfillment with current state</li><li>Current state aligns closely with personal ideal vision</li><li>Built on self-understanding and sustainable effort</li><li>Sense of purpose, meaning, and intentionality in actions</li><li>Ability to navigate challenges without persistent distress</li><li>Regular self-reflection and adjustment of ideal state as needed</li><li>Often has positive impact beyond oneself</li></ul>",
+                "<h4>Emily is Flourishing Socially</h4>",
+                "Emily is a community organizer. She finds her work rewarding as it aligns with her values and passions of being a bridge between what people need and organizations that can help. When asked what she does Emily likes to say, \"I help people help people\". She has cultivated a vast network of meaningful relationships, connecting people across the extremes of society. Emily needed to grow to get here, but at this point she's developed the skills to navigates complex social situations with ease and empathy. Her weekly schedule includes youth mentoring sessions, leading business outreach board meeting, and planning an implementing community events. Emily's reputation as a connector and mediator has led to her being sought after for conflict resolution in both personal and professional contexts. She developed innovative community-building strategies that she helps other cities implement. Despite her busy schedule, Emily maintains deep, nurturing relationships with her family and close friends. She's adept at balancing her social commitments with her personal life, finding joy and fulfillment in both. Emily's social flourishing isn't just about her own success; she consistently uses her social capital to uplift others and strengthen her community. Her ability to create positive change through social connections has become so natural that it's seamlessly integrated into her life. Emily has faced setbacks, losing a close family memeber pulled her into emotional crisis where she self isolated for a couple weeks. Her support system helped Emily to reestablish her routines and habits, her passion and purpose hadn't changed and they acted like a  gravity pulling her back into social flourishing."
+                ];
+                break
         }
 
-        this.displayText(`${state} State`, [description, characteristics]);
+        this.displayText(`${state} State`, text);
+    }
+
+    callToAction() {
+        this.displayText("Where Do You See Yourself", [
+            "Take the self assessment to start having the conversations that help you",
+            "<ol><li><b>understand</b> yourself well enough to state your values, articulate your why, and identify you current state</li><li><b>envision</b> your ideal state and a plan for how to get there</li><li><b>grow</b> the skills necessary to reach your vision</li></ol>"
+        ]);
     }
 }
 
