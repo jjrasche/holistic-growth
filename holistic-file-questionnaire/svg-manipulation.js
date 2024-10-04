@@ -215,13 +215,9 @@ export function sufferingToJoy() {
     const centerX = svgWidth / 2;
     const centerY = svgHeight / 2;
     const radius = Math.min(svgWidth, svgHeight) / 2 - 135; // Slightly smaller than the wheel
-    const angle = Math.PI ; // 45 degrees in radians
-
-    const endX = centerX + radius * Math.cos(angle);
-    const endY = centerY + radius * Math.sin(angle);
     
     // Create arrow
-    const arrow = createElement('path', { 'd': `M ${centerX - 50},${centerY} L ${endX},${endY}`, 'stroke': 'black', 'stroke-width': '5', 'marker-end': 'url(#arrowhead)', 'id': 'suffering-joy-arrow' });
+    const arrow = createElement('path', { 'd': `M ${centerX+50},${centerY} L ${centerX + radius},${centerY}`, 'stroke': 'black', 'stroke-width': '5', 'marker-end': 'url(#arrowhead)', 'id': 'suffering-joy-arrow' });
 
     // Create arrowhead
     const defs = createElement('defs', {});
@@ -231,11 +227,10 @@ export function sufferingToJoy() {
     defs.appendChild(marker);
 
     // Create labels
-    const sufferingLabel = createElement('text', { id: 'suffering-label', x: centerX, y: centerY + 5, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 'bold' });
+    const sufferingLabel = createElement('text', { id: 'suffering-label', x: centerX - 40, y: centerY + 5, 'text-anchor': 'start', 'font-size': 20, 'font-weight': 'bold' });
     sufferingLabel.textContent = 'Suffering'
-    const joyLabel = createElement('text', { id: 'joy-label', x: endX - 110, y: centerY + 5, 'text-anchor': 'start', 'font-size': 20, 'font-weight': 'bold' });
+    const joyLabel = createElement('text', { id: 'joy-label', x: centerX + radius + 95, y: centerY + 5, 'text-anchor': 'end', 'font-size': 20, 'font-weight': 'bold' });
     joyLabel.textContent = 'Joy'
 
     return [arrow, defs, marker, polygon, sufferingLabel, joyLabel]
-
 }

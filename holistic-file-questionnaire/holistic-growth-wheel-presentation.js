@@ -55,7 +55,7 @@ export class HolisticGrowthWheelPresentation extends Presentation {
 
     introduction() {
         this.displayText("Welcome to the Holistic Growth Wheel", [
-            "The Holistic Growth Wheel is a powerful visual tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be."
+            "The Holistic Growth Wheel is a tool designed to give you a comprehensive view of your personal growth journey. It's divided into four main domains, each representing a crucial aspect of your life. By using this wheel, you can identify your current state in each domain and set clear goals for where you want to be."
         ]);
     }
 
